@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/authStore';
 import axios from 'axios';
 export default function Login() {
     const [inputs, setInputs] = useState({})
     const navigate = useNavigate()
+    const dispatch =useDispatch()
     const setInputChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value })
     }
@@ -13,6 +16,7 @@ export default function Login() {
         try {
             const res = await axios.post('http://localhost:8800/api/auth/login', inputs)
             if (res.status === 200) {
+                dispatch(setUser(res.data))
                 navigate('/')
             }
             console.log(res)
