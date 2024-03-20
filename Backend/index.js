@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "./config/prisma.config.js";
 import authRoute from "./route/auth.js";
+import productRoute from "./route/Products.js";
 import cors from "cors";
 const app = express();
 
@@ -12,7 +13,8 @@ const prismaConnection = async () => {
         await prisma.$connect();
         console.log("Connected to database.");
     } catch (error) {
-        console.log("Error connecting to database.");
+        console.log("Error connecting to database.", error
+        );
     }
 
 }
@@ -20,7 +22,7 @@ const prismaConnection = async () => {
 
 
 app.use("/api/auth", authRoute);
-
+app.use("/api/products", productRoute);
 
 app.get("/", (req, res) => {
     res.send("Welcome .");
