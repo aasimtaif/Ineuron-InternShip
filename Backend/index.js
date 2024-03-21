@@ -9,7 +9,7 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-const prismaConnection = async () => {
+const DataBaseConnection = async () => {
     try {
         await mongoose.connect(process.env.DATABASE_URL);
         console.log("Connected to database.");
@@ -30,6 +30,6 @@ app.get("/", (req, res) => {
     res.send("Welcome .");
 })
 app.listen(8800, () => {
-    prismaConnection()
+    DataBaseConnection()
     console.log("Connected to backend.on 8800");
 });
