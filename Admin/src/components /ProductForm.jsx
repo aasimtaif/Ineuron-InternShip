@@ -42,8 +42,8 @@ function ProductForm({ method, url, product, images }) {
         e.preventDefault()
         console.log(imageUrl)
         try {
-            const response = await axios.delete(`http://localhost:8800/api/products/image/${product.id}`,
-                { data: { imageUrl,images } })
+            const response = await axios.delete(`http://localhost:8800/api/products/image/${product._id}`,
+                { data: { imageUrl, images } })
             console.log(response)
         } catch (err) {
             console.log(err)
