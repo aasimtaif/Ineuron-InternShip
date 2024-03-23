@@ -33,10 +33,10 @@ function Products() {
         </thead>
         <tbody>
           {products.map(product => (
-            <tr key={product._id}>
+            <tr key={product._id} className='text-justify'>
               <td>{product.name}</td>
               <td>{product.price}</td>
-              <td>{product.description}</td>
+              <td className='text-sm'>{product.description}</td>
               <td>
                 <Link to={`/products/edit/${product._id}`} className="btn-default" >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">

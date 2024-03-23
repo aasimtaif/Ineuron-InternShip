@@ -24,7 +24,7 @@ const DataBaseConnection = async () => {
 
 app.use("/api/auth", authRoute);
 app.use("/api/products", productRoute);
-app.use("/api/category", CategoryRoute);
+app.use("/api/categories", CategoryRoute);
 
 app.get("/", (req, res) => {
     res.send("Welcome .");

@@ -4,9 +4,19 @@ import { useNavigate } from 'react-router-dom';
 function ProductForm({ method, url, product, images }) {
     const [input, setInput] = useState({ images: [] });
     const [files, setFiles] = useState();
+    const [categoryList, setCategoryList] = useState([])
+    const [properties, setProperties] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
-        setInput({ name: product?.name, description: product?.description, price: product?.price, images: product?.images })
+        axios.get(`http://localhost:8800/api/categories`).then((response) => {
+            setCategoryList(response.data)
+        }).catch((err) => {
+            console.log(err)
+        })
+
+    }, [])
+    useEffect(() => {
+        setInput({ name: product?.name, description: product?.description, price: product?.price, images: product?.images, category: product?.category })
     }, [product])
     const handleChange = (event) => {
         setInput({ ...input, [event.target.name]: event.target.value })
@@ -14,7 +24,9 @@ function ProductForm({ method, url, product, images }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+
         try {
+
             const list = await Promise.all(
                 Object.values(files).map(async (file) => {
                     const data = new FormData();
@@ -29,9 +41,9 @@ function ProductForm({ method, url, product, images }) {
                     return url;
                 })
             );
-
-            const response = await axios[method](`http://localhost:8800/api/${url}`, { ...input, images: list })
-            if (response.status === 200) navigate('/products')
+            console.log([list, ...input.images])
+            // const response = await axios[method](`http://localhost:8800/api/${url}`, { ...input, images: [list, ...input.images] })
+            // if (response.status === 200) navigate('/products')
 
         } catch (err) {
             console.log(err)
@@ -49,7 +61,27 @@ function ProductForm({ method, url, product, images }) {
             console.log(err)
         }
     }
-    // console.log()
+
+    function setProductProp(propName, value) {
+        setProperties(prev => {
+            const newProductProps = { ...prev };
+            newProductProps[propName] = value;
+            return newProductProps;
+        });
+    }
+
+
+    const propertiesToFill = [];
+    if (categoryList.length > 0 && input.category) {
+        let catInfo = categoryList.find(({ _id }) => _id === input.category);
+        propertiesToFill.push(...catInfo.properties);
+        while (catInfo?.parent?._id) {
+            const parentCat = categoryList.find(({ _id }) => _id === catInfo?.parent?._id);
+            propertiesToFill.push(...parentCat.properties);
+            catInfo = parentCat;
+        }
+    }
+    console.log(propertiesToFill)
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -57,10 +89,33 @@ function ProductForm({ method, url, product, images }) {
                 <input required name='name' value={input?.name} type="text" placeholder="Product name"
                     onChange={handleChange}
                 />
+                <label >Category</label>
+                <select value={input?.category} name='category' onChange={handleChange}>
+                    <option value={''}>None</option>
+                    {categoryList.length > 0 && categoryList.map(category => (
+                        <option key={category._id} value={category._id}>{category.name}</option>
+                    ))}
+                </select>
+                {propertiesToFill.length > 0 && propertiesToFill.map((p, index) => (
+                    <div key={p.index} className="">
+                        <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>
+                        <div>
+                            <select value={properties[p.name]}
+                                onChange={ev =>
+                                    setProductProp(p.name, ev.target.value)
+                                }
+                            >
+                                {p.values.map(v => (
+                                    <option key={v} value={v}>{v}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                ))}
                 <div className="mb-2 flex flex-wrap gap-2 flex-col">
                     <div className='grid lg:grid-cols-4  md:grid-cols-2  gap-1 '>
                         {images?.map((link, index) =>
-                            <div class="w-fit relative group">
+                            <div key={link} class="w-auto relative group">
                                 <img src={link} alt="" className="rounded-lg object-cover " />
                                 <div class="absolute inset-0 backdrop-filter backdrop-blur-sm bg-gray-900 bg-opacity-40 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center">
                                     <button class="bg-red-500 text-white px-4 py-2 rounded-lg"
