@@ -13,11 +13,11 @@ function Nav({ showNav: show, setShowNav }) {
         <aside className={(show ? 'left-0' : '-left-full') + " top-0 text-gray-500 p-4 fixed w-full bg-bgGray h-full md:static md:w-auto transition-all"}>
             <div className="mb-4 mr-4 flex flex-row justify-between ">
                 <Logo />
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-700 cursor-pointer hover:w-7 hover:h-7"
+               {show && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-700 cursor-pointer hover:w-7 hover:h-7"
                     onClick={() => setShowNav(!show)}
                 >
                     <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
+                </svg>}
 
 
             </div>
