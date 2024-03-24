@@ -7,7 +7,7 @@ import axios from 'axios';
 export default function Login() {
     const [inputs, setInputs] = useState({})
     const navigate = useNavigate()
-    const dispatch =useDispatch()
+    const dispatch = useDispatch()
     const setInputChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value })
     }

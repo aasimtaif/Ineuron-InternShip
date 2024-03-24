@@ -13,7 +13,7 @@ export const authSlice = createSlice({
         resetUser: (state) => {
             state.user = {}
         }
-    },
+    }
 })
 
 export const { setUser, resetUser } = authSlice.actions

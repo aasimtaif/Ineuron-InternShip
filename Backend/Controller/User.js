@@ -1,5 +1,6 @@
 
-import { prisma } from "../config/prisma.config.js";
+import e from "express";
+import { usersModel } from "../Model/User.model.js";
 import bcrypt from "bcryptjs";
 export const register = async (req, res) => {
     const { password, ...details } = req.body;
@@ -7,13 +8,11 @@ export const register = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hashpassword = bcrypt.hashSync(password, salt);
     try {
-        const user = await prisma.user.create({
-            data: {
-                ...details,
-                password: hashpassword
-            }
+        const user = await usersModel.create({
+            ...details,
+            password: hashpassword
         });
-
+        console.log(user)
         res.json(user);
     } catch (error) {
         console.log(error)
@@ -24,12 +23,12 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
+    console.log(email, password)
     try {
-        const user = await prisma.user.findUnique({
-            where: {
-                email
-            }
+        const user = await usersModel.findOne({
+            email
         });
+        console.log(user)
         if (!user) {
             res.status(400).json({ error: 'User not found' });
         } else {
