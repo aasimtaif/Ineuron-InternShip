@@ -5,6 +5,7 @@ const usersSchema = new mongoose.Schema({
     password: { type: String, required: true },
     phone: { type: String },
     address: { type: String },
+    cartItems: { type: mongoose.Types.ObjectId, ref: 'cartModel' },
 }, {
     timestamps: true,
 });

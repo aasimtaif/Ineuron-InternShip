@@ -14,10 +14,21 @@ export const addProducts = async (req, res) => {
 export const getProducts = async (req, res) => {
     try {
         const products = await productModel.find();
+        console.log(products)
         res.status(200).json(products);
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Error getting products', error });
+    }
+}
+
+export const getNewProducts = async (req, res) => {
+    try {
+        const products = await productModel.find({}).sort({ _id: -1 }).limit(5).exec()
+        res.status(200).json(products);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Error getting new products', error });
     }
 }
 
@@ -30,6 +41,16 @@ export const getProduct = async (req, res) => {
         console.log(error)
         res.status(500).json({ error: 'Error getting product', error });
     }
+}
+export const getFeaturedProducts = async (req, res) => {
+    try {
+        const products = await productModel.findById("66001dc61ba4b54362bc50e9");
+        res.status(200).json(products);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Error getting featured products', error });
+    }
+
 }
 
 export const updateProduct = async (req, res) => {

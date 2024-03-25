@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { useSelector } from 'react-redux'
+import Featured from '../Components/Featured'
+import NewProducts from '../Components/NewProducts';
+
 function Home() {
-    const user = useSelector(state => state.auth.user)
-    console.log(user)
+    const [product, setProduct] = useState();
+    useEffect(() => {
+        axios.get('http://localhost:8800/api/products/featured').then(response => {
+            setProduct(response.data)
+        })
+    }, [])
     return (
-        <div>Home</div>
+        <div>
+            <Featured product={product} />
+            <NewProducts />
+        </div>
     )
 }
 

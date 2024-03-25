@@ -4,7 +4,7 @@ import { ReactSortable } from 'react-sortablejs';
 import { useNavigate } from 'react-router-dom';
 function ProductForm({ method, url, product, images: productImages }) {
     const [input, setInput] = useState({});
-    const [images, setImages] = useState(productImages || []);
+    const [images, setImages] = useState([]);
     const [categoryList, setCategoryList] = useState([])
     const [properties, setProperties] = useState([]);
     const navigate = useNavigate()
@@ -25,20 +25,27 @@ function ProductForm({ method, url, product, images: productImages }) {
     }
 
     const uploadImages = async (e) => {
-        await Promise.all(
-            Object.values(e.target.files).map(async (file) => {
-                const data = new FormData();
-                data.append("file", file);
-                data.append("upload_preset", "upload");
-                const uploadRes = await axios.post(
-                    "https://api.cloudinary.com/v1_1/dndmxaxc8/image/upload",
-                    data
-                );
+        const file = e.target.files[0];
+        try {
+            const data = new FormData();
+            data.append("file", file);
+            data.append("upload_preset", "upload");
+            const uploadRes = await axios.post(
+                "https://api.cloudinary.com/v1_1/dndmxaxc8/image/upload",
+                data
+            );
 
-                const { url } = uploadRes.data;
-                setImages((prev) => [...prev, url]);
-            })
-        );
+            const { url } = uploadRes.data;
+            if (images) {
+                setImages([...images, url]);
+            } else setImages([url])
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+        console.log(images)
     }
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -66,7 +73,6 @@ function ProductForm({ method, url, product, images: productImages }) {
             console.log(err)
         }
     }
-
     function setProductProp(propName, value) {
         setProperties(prev => {
             const newProductProps = { ...prev };
