@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 import styled from "styled-components";
 import Center from './Center';
 const StyledHeader = styled.header`
@@ -61,6 +62,7 @@ const NavButton = styled.button`
 `;
 function Header() {
   const [mobileNavActive, setMobileNavActive] = useState(false);
+  const { cart } = useSelector(state => state.counter)
   return (
     <StyledHeader>
       <Center>
@@ -71,9 +73,8 @@ function Header() {
             <NavLink to="/" >Home</NavLink>
             <NavLink to="/products" >Products</NavLink>
             <NavLink to="/category" >Category</NavLink>
-            <NavLink to="/cart" >Cart</NavLink>
+            <NavLink to="/cart" >Cart({cart?.length})</NavLink>
             <NavLink to="/account" >Account</NavLink>
-
           </StyledNav>
         </Wrapper>
       </Center>

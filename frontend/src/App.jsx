@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
@@ -9,7 +10,10 @@ import Account from './Pages/Account';
 import Cart from './Pages/Cart';
 
 function App() {
-
+  const { cart } = useSelector(state => state.counter);
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
   return (
     <React.Fragment>
       <Header />

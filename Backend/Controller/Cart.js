@@ -6,10 +6,11 @@ export const addToCart = async (req, res) => {
     try {
         const userId = req.body.userId; // Get the user ID from the request
         const productId = req.body.productId; // Get the product ID from the request
-        console.log(userId, productId)
-        const cart = await Cart.findOneAndUpdate({ userId }, {
-            $push: { items: { product: productId } }
-        }, {
+        const foundItem = await Cart.findOne({ 'items.product': productId });
+        console.log(foundItem)
+        const update =  { $inc: { 'items.$.quantiy': 1 } }
+           
+        const cart = await Cart.findOneAndUpdate({ userId }, update, {
             upsert: true, new: true
         }); // Find the cart for the user
         const user = await User.findByIdAndUpdate(userId, { cartItems: cart._id }); // Find the user
@@ -48,9 +49,10 @@ export const fetchCartItemsWithUserData = async (req, res) => {
             productName: cartItem.product.name,
             productDescription: cartItem.product.description,
             productPrice: cartItem.product.price,
+            productImages: cartItem.product.images,
+            quantity: cartItem.quantiy,
             // Add other product details as needed
         }));
-
         res.status(200).json({ _id: user._id, userName: user.userName, email: user.email, cart: cartItems });
     } catch (error) {
         console.error(error);

@@ -2,8 +2,10 @@ import Center from "./Center";
 import styled from "styled-components";
 import Button from "./Button";
 import ButtonLink from "./ButtonLink";
+import CheckIcon from "./icons/CheckIcon";
 import CartIcon from "./icons/CartIcon";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { incrementQuantity, decrementQuantity } from '../store/store'
 const Bg = styled.div`
   background-color: #222;
   color:#fff;
@@ -55,7 +57,10 @@ const ButtonsWrapper = styled.div`
 `;
 
 export default function Featured({ product }) {
-  // console.log(product)
+  const { cart } = useSelector(state => state.counter)
+  const dispatch = useDispatch()
+  const cartProduct = cart?.find(({ _id }) => _id === product?._id)
+  console.log(cart)
   return (
     <Bg>
       <Center>
@@ -69,10 +74,19 @@ export default function Featured({ product }) {
                   to={'/product/' + product?._id}
                   outline={1} white={1}>Read more</ButtonLink>
                 <Button white
-                //  onClick={addFeaturedToCart}
+                  onClick={() => { dispatch(incrementQuantity(product)) }}
                 >
-                  <CartIcon />
-                  Add to cart
+                  {cartProduct ?
+                    <>
+                      <CheckIcon />
+                      <CartIcon />
+
+                    </>
+                    : <>
+                      <CartIcon />
+                      Add to cart
+                    </>
+                  }
                 </Button>
               </ButtonsWrapper>
             </div>

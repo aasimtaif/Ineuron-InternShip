@@ -44,7 +44,7 @@ export const getProduct = async (req, res) => {
 }
 export const getFeaturedProducts = async (req, res) => {
     try {
-        const products = await productModel.findById("66001dc61ba4b54362bc50e9");
+        const products = await productModel.findById("6602a06def400221e14646fe");
         res.status(200).json(products);
     } catch (error) {
         console.log(error)

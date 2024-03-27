@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 const primary = '#0D3D29';
 export const ButtonStyle = css`
   border:0;
+  background-color: #e8e8e8;
   padding: 5px 15px;
   border-radius: 5px;
   cursor: pointer;
@@ -16,9 +17,11 @@ export const ButtonStyle = css`
     margin-right: 5px;
   }
   ${props => props.block && css`
+  
   padding : 0 0;
     display: block;
     width: 50%;
+    font-weight: 700;
   `}
   ${props => props.white && !props.outline && css`
     background-color: #fff;

@@ -2,7 +2,8 @@ import styled from "styled-components";
 import Button from "./Button";
 import CartIcon from "./icons/CartIcon";
 import { Link } from "react-router-dom";
-
+import { useDispatch } from 'react-redux';
+import { incrementQuantity, decrementQuantity } from '../store/store'
 const ProductWrapper = styled.div`
   
 `;
@@ -47,7 +48,7 @@ const PriceRow = styled.div`
 
 const Price = styled.div`
   font-size: 1rem;
-  font-weight:400;
+  font-weight:normal;
   text-align: right;
   
   @media screen and (min-width: 768px) {
@@ -58,30 +59,36 @@ const Price = styled.div`
 `;
 
 
-function ProductBox({ _id, name, description, price, images }) {
-    const url = '/product/' + _id;
-    return (
-        <ProductWrapper>
-            <WhiteBox to={url}>
-                <div>
-                    <img src={images?.[0]} alt="" />
-                </div>
-            </WhiteBox>
-            <ProductInfoBox>
-                <Title to={url}>{name}</Title>
-                <PriceRow>
-                    <Price>
-                        ${price}
-                    </Price>
-                    <Button block
-                        // onClick={() => addProduct(_id)}
-                        primary outline >
-                        Add to cart
-                    </Button>
-                </PriceRow>
-            </ProductInfoBox>
-        </ProductWrapper>
-    );
+function ProductBox({ product }) {
+  const dispatch = useDispatch()
+
+  const addProductToCart = () => {
+    console.log(product)
+    dispatch(incrementQuantity(product))
+  }
+  const url = '/product/' + product._id;
+  return (
+    <ProductWrapper>
+      <WhiteBox to={url}>
+        <div>
+          <img src={product?.images?.[0]} alt="" />
+        </div>
+      </WhiteBox>
+      <ProductInfoBox>
+        <Title to={url}>{product?.name}</Title>
+        <PriceRow>
+          <Price>
+            ₹{product?.price}
+          </Price>
+          <Button block
+            onClick={addProductToCart}
+            primary outline >
+            Add to cart
+          </Button>
+        </PriceRow>
+      </ProductInfoBox>
+    </ProductWrapper>
+  );
 }
 
 export default ProductBox
