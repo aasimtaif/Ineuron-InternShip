@@ -8,6 +8,7 @@ import Header from './Components/Header';
 import Products from './Pages/Products';
 import Account from './Pages/Account';
 import Cart from './Pages/Cart';
+import ProductDetais from './Pages/ProductDetais';
 
 function App() {
   const { cart } = useSelector(state => state.counter);
@@ -22,7 +23,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/products' element={<Products />} />
-        <Route path='/product/:id' element={<Products />} />\
+        <Route path='/product/:id' element={<ProductDetais />} />\
         <Route path='/cart' element={<Cart />} />
         {/* <Route path='/category' element={<Category />} /> */}
         <Route path='/account' element={<Account />} />

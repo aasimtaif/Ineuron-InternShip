@@ -6,6 +6,7 @@ import CheckIcon from "./icons/CheckIcon";
 import CartIcon from "./icons/CartIcon";
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity } from '../store/store'
+import AddSubButton from "./AddSubButton";
 const Bg = styled.div`
   background-color: #222;
   color:#fff;
@@ -73,21 +74,21 @@ export default function Featured({ product }) {
                 <ButtonLink
                   to={'/product/' + product?._id}
                   outline={1} white={1}>Read more</ButtonLink>
-                <Button white
-                  onClick={() => { dispatch(incrementQuantity(product)) }}
-                >
-                  {cartProduct ?
-                    <>
-                      <CheckIcon />
-                      <CartIcon />
+                {cartProduct ?
+                  <>
+                    <AddSubButton white product={product} />
+                  </>
+                  :
+                  <Button white
+                    onClick={() => { dispatch(incrementQuantity(product)) }}
+                  >
 
-                    </>
-                    : <>
-                      <CartIcon />
-                      Add to cart
-                    </>
-                  }
-                </Button>
+                    <CartIcon />
+                    Add to cart
+                  </Button>
+
+                }
+
               </ButtonsWrapper>
             </div>
           </Column>

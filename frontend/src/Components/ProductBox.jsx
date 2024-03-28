@@ -2,10 +2,14 @@ import styled from "styled-components";
 import Button from "./Button";
 import CartIcon from "./icons/CartIcon";
 import { Link } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity } from '../store/store'
+import DeleteIcon from "./icons/DeleteIcon";
 const ProductWrapper = styled.div`
-  
+  border-right: 2px solid #f0f0f0;
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 1px;
 `;
 
 const WhiteBox = styled(Link)`
@@ -48,8 +52,8 @@ const PriceRow = styled.div`
 
 const Price = styled.div`
   font-size: 1rem;
-  font-weight:normal;
-  text-align: right;
+  font-weight:600;
+  text-align: left;
   
   @media screen and (min-width: 768px) {
     font-size: 1.2rem;
@@ -58,8 +62,15 @@ const Price = styled.div`
   }
 `;
 
+const CartDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 1.2rem;  
+`
 
 function ProductBox({ product }) {
+  const quantity = useSelector(state => state.counter.cart?.find(({ _id }) => _id === product?._id)?.quantity)
   const dispatch = useDispatch()
 
   const addProductToCart = () => {
@@ -80,11 +91,17 @@ function ProductBox({ product }) {
           <Price>
             ₹{product?.price}
           </Price>
-          <Button block
-            onClick={addProductToCart}
-            primary outline >
-            Add to cart
-          </Button>
+
+          {quantity ? <CartDiv>
+            <CartIcon /> {quantity} <DeleteIcon />
+
+          </CartDiv> :
+            <Button block
+              onClick={addProductToCart}
+              primary outline >
+              Add to cart
+            </Button>}
+
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>

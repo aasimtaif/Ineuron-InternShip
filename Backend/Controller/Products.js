@@ -13,8 +13,13 @@ export const addProducts = async (req, res) => {
 
 export const getProducts = async (req, res) => {
     try {
-        const products = await productModel.find();
-        console.log(products)
+        const products = await productModel.find().populate({
+            path: 'review',
+            populate: {
+                path: 'userId',
+                model: 'usersModel' // Assuming 'User' is the model name for the user details
+            }
+        });;
         res.status(200).json(products);
     } catch (error) {
         console.log(error)
@@ -24,7 +29,13 @@ export const getProducts = async (req, res) => {
 
 export const getNewProducts = async (req, res) => {
     try {
-        const products = await productModel.find({}).sort({ _id: -1 }).limit(5).exec()
+        const products = await productModel.find({}).populate({
+            path: 'review',
+            populate: {
+                path: 'userId',
+                model: 'usersModel' // Assuming 'User' is the model name for the user details
+            }
+        }).sort({ _id: -1 }).limit(5).exec()
         res.status(200).json(products);
     } catch (error) {
         console.log(error)
@@ -35,7 +46,13 @@ export const getNewProducts = async (req, res) => {
 export const getProduct = async (req, res) => {
     const { id } = req.params;
     try {
-        const product = await productModel.findById(id)
+        const product = await productModel.findById(id).populate({
+            path: 'review',
+            populate: {
+                path: 'userId',
+                model: 'usersModel' // Assuming 'User' is the model name for the user details
+            }
+        });
         res.status(200).json(product);
     } catch (error) {
         console.log(error)
@@ -44,7 +61,14 @@ export const getProduct = async (req, res) => {
 }
 export const getFeaturedProducts = async (req, res) => {
     try {
-        const products = await productModel.findById("6602a06def400221e14646fe");
+        const products = await productModel.findById("66047c9ec0f5c072a08c45d2").populate({
+            path: 'review',
+            populate: {
+                path: 'userId',
+                model: 'usersModel' // Assuming 'User' is the model name for the user details
+            }
+        });
+        console.log(products)
         res.status(200).json(products);
     } catch (error) {
         console.log(error)
@@ -93,5 +117,17 @@ export const deleteImage = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Error deleting image', error });
+    }
+}
+
+export const addProductReview = async (req, res) => {
+    const { id } = req.params;
+    console.log(req.body)
+    try {
+        const product = await productModel.findByIdAndUpdate(id, { $push: { review: req.body } }, { new: true, useFindAndModify: false });
+        res.status(200).json(product);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Error adding review', error });
     }
 }
