@@ -22,7 +22,6 @@ const ColWrapper = styled.div`
   gap: 40px;
   margin: 20px 0;
 `;
-const ReviewList = styled.div``
 const DetailsSection = styled.div`
     
     display: flex;
@@ -52,6 +51,7 @@ const Box = styled.div`
   display: flex;
   justify-content: start;
     flex-direction: row;
+    padding: 10px;
 gap: 20px;
 textarea {
     flex: 1; 
@@ -63,15 +63,45 @@ textarea {
 @media screen and (max-width: 600px) {
     flex-direction: column;
 `;
+const ReviewList = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 0;
+    border-top: 2px solid #ccc;
+    h1 {
+        font-size: 1.5rem;
+    border-bottom: 2px solid #ccc;
+
+    }
+    `
+
+const Review = styled.div`
+width: 100%;
+display: grid;
+grid-template-columns:.5fr .5fr; ;
+place-items: center;
+gap:0px
 
 
+
+`
+const User = styled.p`
+font-size: .7rem;
+color: #898c8a;`
+const Comment = styled.h4`
+font-size: 1rem;
+color: 1c1c1c;
+
+`
 
 
 function ProductDetais() {
     const { id } = useParams();
     const [product, setProduct] = useState();
     const [isLoading, setIsLoading] = useState(false);
-    const [review, setReview] = useState({ rating: 1, comment: '' });
+    const [review, setReview] = useState({ rating: 0, comment: '' });
     const { auth } = useSelector(state => state)
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
@@ -162,8 +192,29 @@ function ProductDetais() {
                 <Button primary onClick={handleReviewSubmit}>Submit</Button>
             </Box>
             <ReviewList>
-                <h2>Reviews</h2>
-                <p>There are no reviews yet</p>
+                <h1>Reviews</h1>
+                {product?.review?.length > 0 ?
+                    <>
+                        {product?.review?.map((review, index) => {
+                            return (
+                                <Review>
+                                    <Comment>{review.comment}</Comment>
+                                    <ReactStars
+                                        count={5}
+                                        size={15}
+                                        isHalf='true'
+                                        activeColor="#ffd700"
+                                        value={review.rating}
+                                        edit={false}
+                                    />
+                                    <User>~{review.userId.userName}</User>
+                                </Review>
+                            )
+                        })}
+                    </>
+                    :
+                    <h4>There are no reviews yet</h4>
+                }
             </ReviewList>
         </Center>
     )
