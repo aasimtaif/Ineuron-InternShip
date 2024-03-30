@@ -9,6 +9,8 @@ export const ButtonStyle = css`
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  display: flex;
+  justify-content: center;
   text-decoration: none;
   font-family: 'Poppins', sans-serif;
   font-weight:500;

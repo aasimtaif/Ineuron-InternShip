@@ -93,7 +93,7 @@ function ProductBox({ product }) {
           </Price>
 
           {quantity ? <CartDiv>
-            <CartIcon /> {quantity} <DeleteIcon />
+            <CartIcon /> {quantity} 
 
           </CartDiv> :
             <Button block

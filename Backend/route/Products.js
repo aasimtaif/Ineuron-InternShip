@@ -8,7 +8,7 @@ router.get('/new-products', getNewProducts)
 router.get('/featured', getFeaturedProducts)
 router.get('/:id', getProduct)
 router.put('/:id', updateProduct)
-router.put('/review/:id', addProductReview)
+router.put('/reviews/:id', addProductReview)
 router.delete('/:id', deleteProduct)
 router.delete('/image/:id', deleteImage)
 

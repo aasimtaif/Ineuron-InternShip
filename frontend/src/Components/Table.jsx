@@ -11,6 +11,7 @@ const StyledTable = styled.table`
   }
   td{
     border-top: 1px solid rgba(0,0,0,.1);
+    padding: 10px 0;
   }
 `;
 

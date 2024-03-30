@@ -61,7 +61,7 @@ export const getProduct = async (req, res) => {
 }
 export const getFeaturedProducts = async (req, res) => {
     try {
-        const products = await productModel.findById("66047c9ec0f5c072a08c45d2").populate({
+        const products = await productModel.findById("66069926c00e8894a884fdc4").populate({
             path: 'review',
             populate: {
                 path: 'userId',

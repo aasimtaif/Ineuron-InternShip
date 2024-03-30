@@ -11,6 +11,8 @@ function ProductForm({ method, url, product, images: productImages }) {
     useEffect(() => {
         axios.get(`http://localhost:8800/api/categories`).then((response) => {
             setCategoryList(response.data)
+            setProperties(product.properties)
+
         }).catch((err) => {
             console.log(err)
         })
@@ -19,6 +21,9 @@ function ProductForm({ method, url, product, images: productImages }) {
     useEffect(() => {
         setInput({ name: product?.name, description: product?.description, price: product?.price, category: product?.category })
         setImages(productImages)
+        setProperties(product?.properties)
+
+
     }, [product])
     const handleChange = (event) => {
         setInput({ ...input, [event.target.name]: event.target.value })
@@ -50,7 +55,7 @@ function ProductForm({ method, url, product, images: productImages }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios[method](`http://localhost:8800/api/${url}`, { ...input, images })
+            const response = await axios[method](`http://localhost:8800/api/${url}`, { ...input, images, properties })
             if (response.status === 200) navigate('/products')
 
         } catch (err) {
@@ -92,7 +97,7 @@ function ProductForm({ method, url, product, images: productImages }) {
             catInfo = parentCat;
         }
     }
-    console.log(images)
+    console.log(propertiesToFill)
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -107,16 +112,17 @@ function ProductForm({ method, url, product, images: productImages }) {
                         <option key={category._id} value={category._id}>{category.name}</option>
                     ))}
                 </select>
-                {propertiesToFill.length > 0 && propertiesToFill.map((p, index) => (
+                {propertiesToFill.length > 0 && propertiesToFill?.map((p, index) => (
                     <div key={p.index} className="">
-                        <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>
+                        <label>{p?.name[0].toUpperCase() + p?.name.substring(1)}</label>
                         <div>
-                            <select value={properties[p.name]}
+                            <select value={properties?.[p?.name]}
                                 onChange={ev =>
-                                    setProductProp(p.name, ev.target.value)
+                                    setProductProp(p?.name, ev.target.value)
                                 }
                             >
-                                {p.values.map(v => (
+                                <option value={''}>None</option>
+                                {p?.values.map(v => (
                                     <option key={v} value={v}>{v}</option>
                                 ))}
                             </select>

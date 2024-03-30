@@ -17,6 +17,7 @@ export default function Login() {
             const res = await axios.post('http://localhost:8800/api/auth/login', inputs)
             if (res.status === 200) {
                 dispatch(setUser(res.data))
+                localStorage.setItem('user', JSON.stringify(res.data))
                 navigate('/')
             }
             console.log(res)
