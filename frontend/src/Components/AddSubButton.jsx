@@ -87,16 +87,16 @@ const ButtonDiv = styled.div`
   align-items: center;`
 
 function AddSubButton({ children, product, ...rest }) {
-    const dispatch = useDispatch();
-    const quantity = useSelector(state => state.counter.cart.find(({ _id }) => _id === product?._id)?.quantity)
-    console.log(quantity)
-    return (
-        <ButtonDiv>
-            <StyledButton {...rest} onClick={() => { dispatch(incrementQuantity(product)) }}>+</StyledButton>
-            <Quantity {...rest}>{quantity}</Quantity>
-            <StyledButton {...rest} onClick={() => { dispatch(decrementQuantity(product)) }}>-</StyledButton>
-        </ButtonDiv>
-    )
+  const dispatch = useDispatch();
+  const quantity = useSelector(state => state.counter.cart.find(({ _id }) => _id === product?._id)?.quantity)
+  console.log(quantity)
+  return (
+    <ButtonDiv>
+      <StyledButton {...rest} onClick={() => { dispatch(decrementQuantity(product)) }}>-</StyledButton>
+      <Quantity {...rest}>{quantity}</Quantity>
+      <StyledButton {...rest} onClick={() => { dispatch(incrementQuantity(product)) }}>+</StyledButton>
+    </ButtonDiv>
+  )
 }
 
 export default AddSubButton

@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Table from '../Components/Table'
 import ReactStars from "react-rating-stars-component";
+import AddSubButton from '../Components/AddSubButton';
 
 const ColWrapper = styled.div`
   display: grid;
@@ -62,6 +63,9 @@ textarea {
   }
 @media screen and (max-width: 600px) {
     flex-direction: column;
+    background-color: #f9f9f9;
+
+}
 `;
 const ReviewList = styled.div`
     display: flex;
@@ -80,12 +84,18 @@ const ReviewList = styled.div`
 const Review = styled.div`
 width: 100%;
 display: grid;
-grid-template-columns:.5fr .5fr; ;
+grid-template-columns:1fr 1fr; 
 place-items: center;
 gap:0px
+`
 
-
-
+const ButtonDiv = styled.div`
+display: flex;
+flex-direction: row;
+gap: 10px;
+align-items: center;
+justify-content: center;
+text-align: center;
 `
 const User = styled.p`
 font-size: .7rem;
@@ -102,7 +112,7 @@ function ProductDetais() {
     const [product, setProduct] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [review, setReview] = useState({ rating: 0, comment: '' });
-    const { auth } = useSelector(state => state)
+    const { auth, counter: { cart: cart } } = useSelector(state => state)
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -129,14 +139,14 @@ function ProductDetais() {
         }
         setIsLoading(false)
     }
-
+    const cartProduct = cart?.find(item => item._id === product?._id)
     if (isLoading) {
         return <Center>Loading...</Center>
     }
     const ratingChanged = (newRating) => {
         setReview({ ...review, rating: newRating });
     };
-    console.log(review)
+    console.log(cart)
     return (
 
         <Center>
@@ -152,9 +162,21 @@ function ProductDetais() {
                             <Price>${product?.price}</Price>
                         </div>
                         <div>
-                            <Button primary onClick={() => dispatch(incrementQuantity(product))}>
-                                <CartIcon />Add to cart
-                            </Button>
+                            {cartProduct ?
+                                <ButtonDiv>
+                                    <Button primary onClick={() => dispatch(incrementQuantity(product))}>
+                                        +
+                                    </Button>
+                                    <span>{cartProduct.quantity}</span>
+                                    <Button primary onClick={() => dispatch(decrementQuantity(product))}>
+                                        -
+                                    </Button>
+                                </ButtonDiv>
+                                :
+                                <Button primary onClick={() => dispatch(incrementQuantity(product))}>
+                                    <CartIcon />Add to cart
+                                </Button>}
+
                         </div>
                     </PriceRow>
                 </DetailsSection>
@@ -199,6 +221,7 @@ function ProductDetais() {
                             return (
                                 <Review>
                                     <Comment>{review.comment}</Comment>
+                                    <User>~{review.userId.userName}</User>
                                     <ReactStars
                                         count={5}
                                         size={15}
@@ -207,7 +230,6 @@ function ProductDetais() {
                                         value={review.rating}
                                         edit={false}
                                     />
-                                    <User>~{review.userId.userName}</User>
                                 </Review>
                             )
                         })}

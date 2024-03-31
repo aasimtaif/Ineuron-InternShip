@@ -1,13 +1,21 @@
 import mongoose from "mongoose";
+
+const productSchema = new mongoose.Schema({
+    quantity: Number,
+    product: { type: mongoose.Types.ObjectId, ref: 'productModel' }
+});
 const orderSchema = new mongoose.Schema({
-    line_items: Object,
+    razerpayId: String,
+    userId: { type: mongoose.Types.ObjectId, ref: 'usersModel' },
     name: String,
     email: String,
     city: String,
     postalCode: String,
     streetAddress: String,
     country: String,
-    paid: Boolean,
+    paid: { type: Boolean, default: false },
+    totalPrice: Number,
+    products: [productSchema]
 }, {
     timestamps: true,
 });

@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
     images: [{ type: String }],
     category: { type: mongoose.Types.ObjectId, ref: 'categoryModel' },
     properties: { type: Object },
+    
     review: [reviewProductSchema]
 }, {
     timestamps: true,

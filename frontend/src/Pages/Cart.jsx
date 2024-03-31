@@ -8,6 +8,7 @@ import { incrementQuantity, decrementQuantity, resetCart } from '../store/store'
 import axios from "axios";
 import Table from "../Components/Table";
 import Input from "../Components/Input";
+import { useNavigate } from "react-router-dom";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -78,43 +79,49 @@ const CityHolder = styled.div`
 `;
 
 export default function CartPage() {
-  const cartProducts = useSelector(state => state.counter.cart);
+  const { auth, counter: { cart: cart } } = useSelector(state => state)
   const dispatch = useDispatch();
-  const [products, setProducts] = useState(cartProducts);
+  const [products, setProducts] = useState(cart);
   const [billData, setBillData] = useState({})
   const [isSuccess, setIsSuccess] = useState(false);
+  const navigate = useNavigate();
+  useEffect(() => {
+    setProducts(cart)
+  }, [cart])
 
   const handleChange = (e) => {
     setBillData({ ...billData, [e.target.name]: e.target.value })
   }
-  useEffect(() => {
-    setProducts(cartProducts)
-  }, [cartProducts]);
-  // useEffect(() => {
-  //   if (typeof window === 'undefined') {
-  //     return;
-  //   }
-  //   if (window?.location.href.includes('success')) {
-  //     setIsSuccess(true);
-  //     dispatch(resetCart());
-  //   }
-  // }, []);
   function moreOfThisProduct(id) {
     dispatch(incrementQuantity(id));
   }
   function lessOfThisProduct(id) {
     dispatch(decrementQuantity(id));
   }
-  async function goToPayment() {
-    const response = await axios.post('/api/checkout', {
-      ...billData
-    });
-    if (response.data.url) {
-      window.location = response.data.url;
+  const goToPayment = async () => {
+    try {
+      const response = axios.post(`http://localhost:8800/api/orders`, {
+        ...billData,
+        products: products.map(product => ({ product: product._id, quantity: product.quantity })),
+        userId: auth.user._id,
+        totalPrice: total
+      })
+      setIsSuccess(true)
+      console.log(response)
+      if (response) {
+        dispatch(resetCart())
+        setTimeout(() => {
+          navigate('/')
+        }, 10000)
+      };
+    } catch (error) {
+      console.log(error)
     }
+
+
   }
   let total = 0;
-  for (const productId of cartProducts) {
+  for (const productId of cart) {
     const price = productId.price * productId.quantity;
     total += price;
   }
@@ -134,14 +141,13 @@ export default function CartPage() {
       </>
     );
   }
-  console.log(billData)
   return (
     <>
       <Center>
         <ColumnsWrapper>
           <Box>
             <h2>Cart</h2>
-            {!cartProducts?.length && (
+            {!cart?.length && (
               <div>Your cart is empty</div>
             )}
             {products?.length > 0 && (
@@ -165,12 +171,12 @@ export default function CartPage() {
                       <td>
                         <TD>
                           <Button
-                            onClick={() => lessOfThisProduct(product)}>-</Button>
+                            onClick={() => moreOfThisProduct(product)}>+</Button>
                           <QuantityLabel>
                             {product.quantity}
                           </QuantityLabel>
                           <Button
-                            onClick={() => moreOfThisProduct(product)}>+</Button>
+                            onClick={() => lessOfThisProduct(product)}>-</Button>
                         </TD>
                       </td>
                       <td>
@@ -187,7 +193,7 @@ export default function CartPage() {
               </Table>
             )}
           </Box>
-          {!!cartProducts?.length && (
+          {!!cart?.length && (
             <Box>
               <h2>Order information</h2>
               <Input type="text"
