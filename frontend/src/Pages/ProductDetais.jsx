@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Center from "../Components/Center";
-import Header from "../Components/Header";
 import styled from "styled-components";
 import WhiteBox from "../Components/WhiteBox";
 import ProductImages from '../Components/ProductImages';
@@ -9,10 +8,9 @@ import CartIcon from "../Components/icons/CartIcon";
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity } from '../store/store';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import Table from '../Components/Table'
 import ReactStars from "react-rating-stars-component";
-import AddSubButton from '../Components/AddSubButton';
+import { Axios } from '../utils/api';
 
 const ColWrapper = styled.div`
   display: grid;
@@ -116,7 +114,7 @@ function ProductDetais() {
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:8800/api/products/reviews/${id}`, { ...review, userId: auth.user._id })
+            const response = await Axios.put(`products/reviews/${id}`, { ...review, userId: auth.user._id })
             console.log(response)
         } catch (e) {
             console.log(e)
@@ -132,7 +130,7 @@ function ProductDetais() {
     const getProductData = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8800/api/products/${id}`);
+            const response = await Axios.get(`http://localhost:8800/api/products/${id}`);
             setProduct(response.data)
         } catch (e) {
             console.log(e)
@@ -220,8 +218,8 @@ function ProductDetais() {
                         {product?.review?.map((review, index) => {
                             return (
                                 <Review>
-                                    <Comment>{review.comment}</Comment>
-                                    <User>~{review.userId.userName}</User>
+                                    <Comment>{review?.comment}</Comment>
+                                    <User>~{review?.userId?.userName}</User>
                                     <ReactStars
                                         count={5}
                                         size={15}

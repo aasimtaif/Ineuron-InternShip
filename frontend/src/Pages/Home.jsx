@@ -3,11 +3,11 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 import Featured from '../Components/Featured'
 import NewProducts from '../Components/NewProducts';
-
+import { Axios } from '../utils/api';
 function Home() {
     const [product, setProduct] = useState();
     useEffect(() => {
-        axios.get('http://localhost:8800/api/products/featured').then(response => {
+        Axios.get('products/featured').then(response => {
             setProduct(response.data)
         })
     }, [])

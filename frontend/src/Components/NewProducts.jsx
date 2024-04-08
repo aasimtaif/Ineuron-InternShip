@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
 import Center from "./Center";
-// import ProductsGrid from "./ProductsGrid"
-import axios from 'axios'
 import ProductsGrid from './ProductsGrid';
+import { Axios } from '../utils/api';
 const Title = styled.h2`
   font-size: 2rem;
   margin:30px 0 20px;
@@ -12,7 +11,7 @@ const Title = styled.h2`
 function NewProducts() {
     const [products, setProducts] = useState();
     useEffect(() => {
-        axios.get('http://localhost:8800/api/products/new-products').then(response => {
+        Axios.get('products/new-products').then(response => {
             setProducts(response.data)
         })
     }, [])

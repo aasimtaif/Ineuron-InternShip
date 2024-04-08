@@ -1,6 +1,7 @@
 
 import e from "express";
 import { usersModel } from "../Model/User.model.js";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 export const register = async (req, res) => {
     const { password, ...details } = req.body;
@@ -36,8 +37,15 @@ export const login = async (req, res) => {
             if (!validPassword) {
                 res.status(400).json({ error: 'Invalid password' });
             } else {
-                user.password = '';
-                res.json(user);
+                const token = jwt.sign(
+                    { id: user._id, isAdmin: user.isAdmin },
+                    process.env.JWT
+                );
+
+                const { password, isAdmin, _doc, ...otherDetails } = user;
+                res
+                    .status(200)
+                    .json({ details: { ..._doc}, isAdmin, token });
             }
         }
     } catch (error) {

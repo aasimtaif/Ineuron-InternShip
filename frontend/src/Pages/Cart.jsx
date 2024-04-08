@@ -5,9 +5,9 @@ import Button from "../Components/Button";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity, resetCart } from '../store/store'
-import axios from "axios";
 import Table from "../Components/Table";
 import Input from "../Components/Input";
+import { Axios } from "axios";
 import { useNavigate } from "react-router-dom";
 
 const ColumnsWrapper = styled.div`
@@ -100,7 +100,7 @@ export default function CartPage() {
   }
   const goToPayment = async () => {
     try {
-      const response = axios.post(`http://localhost:8800/api/orders`, {
+      const response = Axios.post(`orders`, {
         ...billData,
         products: products.map(product => ({ product: product._id, quantity: product.quantity })),
         userId: auth.user._id,

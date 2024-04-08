@@ -65,7 +65,7 @@ export const getFeaturedProducts = async (req, res) => {
             path: 'review',
             populate: {
                 path: 'userId',
-                model: 'usersModel' // Assuming 'User' is the model name for the user details
+                model: 'usersModel'
             }
         });
         console.log(products)
@@ -73,6 +73,30 @@ export const getFeaturedProducts = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Error getting featured products', error });
+    }
+
+}
+
+export const searchProducts = async (req, res) => {
+    const { q } = req.query;
+    try {
+        const products = await productModel.find({
+            $or: [
+                { name: { $regex: q, $options: 'i' } },
+                { description: { $regex: q, $options: 'i' } }
+            ]
+        }).populate({
+            path: 'review',
+            populate: {
+                path: 'userId',
+                model: 'usersModel' // Assuming 'User' is the model name for the user details
+            }
+        });
+        console.log(products)
+        res.status(200).json(products);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Error searching products', error });
     }
 
 }
