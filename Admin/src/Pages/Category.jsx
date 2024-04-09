@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { withSwal } from 'react-sweetalert2';
-
+import { Axios } from "../utils/api";
 function Categories({ swal }) {
   const [editedCategory, setEditedCategory] = useState(null);
   const [name, setName] = useState('');
@@ -12,7 +12,7 @@ function Categories({ swal }) {
     fetchCategories();
   }, [])
   function fetchCategories() {
-    axios.get('http://localhost:8800/api/categories').then(result => {
+    Axios.get('http://localhost:8800/api/categories').then(result => {
       setCategories(result.data);
     });
   }
@@ -28,10 +28,10 @@ function Categories({ swal }) {
     };
     if (editedCategory) {
       data._id = editedCategory._id;
-      await axios.put(`http://localhost:8800/api/categories/${data._id}`, data);
+      await Axios.put(`http://localhost:8800/api/categories/${data._id}`, data);
       setEditedCategory(null);
     } else {
-      await axios.post(`http://localhost:8800/api/categories`, data);
+      await Axios.post(`http://localhost:8800/api/categories`, data);
     }
     setName('');
     setParentCategory('');
@@ -61,7 +61,7 @@ function Categories({ swal }) {
     }).then(async result => {
       if (result.isConfirmed) {
         const { _id } = category;
-        await axios.delete('/api/categories?_id=' + _id);
+        await Axios.delete(`categories/${_id}`);
         fetchCategories();
       }
     });

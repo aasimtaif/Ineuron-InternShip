@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ProductForm from '../components /ProductForm'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { Axios } from '../utils/api'
 function EditProduct() {
     const { id } = useParams()
     const [product, setProduct] = useState(null)
@@ -9,7 +10,7 @@ function EditProduct() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8800/api/products/${id}`)
+                const response = await Axios.get(`http://localhost:8800/api/products/${id}`)
                 setProduct(response.data)
                 setImages(response.data.images)
                 console.log(response)

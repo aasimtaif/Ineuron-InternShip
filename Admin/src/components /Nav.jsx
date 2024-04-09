@@ -2,8 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import Logo from './Logo'
-
+import { resetUser } from '../store/authStore'
+import { useSelector, useDispatch } from 'react-redux'
 function Nav({ showNav: show, setShowNav }) {
+
+    const { user } = useSelector(state => state)
+    const dispatch = useDispatch()
+    console.log(user)
     const inactiveLink = 'flex gap-1 p-1 '
     const activeLink = inactiveLink + ' bg-highlight text-primary rounded-l-md '
     const inactiveIcon = 'w-6 h-6';
@@ -13,7 +18,7 @@ function Nav({ showNav: show, setShowNav }) {
         <aside className={(show ? 'left-0' : '-left-full') + " top-0 text-gray-500 p-4 fixed w-full bg-bgGray h-full md:static md:w-auto transition-all"}>
             <div className="mb-4 mr-4 flex flex-row justify-between ">
                 <Logo />
-               {show && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-700 cursor-pointer hover:w-7 hover:h-7"
+                {show && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-700 cursor-pointer hover:w-7 hover:h-7"
                     onClick={() => setShowNav(!show)}
                 >
                     <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -68,15 +73,31 @@ function Nav({ showNav: show, setShowNav }) {
                         Settings
                     </span>
                 </Link>
-                <button className={inactiveLink}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
+                {user.details ?
+                    <button className={inactiveLink} onClick={() => {
+                        dispatch(resetUser())
+                    }}>
 
-                    <span>
-                        logout
-                    </span>
-                </button>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+
+                        <span>
+                            logout
+                        </span>
+                    </button> :
+                    <Link to="/login" className={inactiveLink}>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        </svg>
+
+                        <span>
+                            LogIn
+                        </span>
+                    </Link>
+                }
+
             </nav>
         </aside>
     )

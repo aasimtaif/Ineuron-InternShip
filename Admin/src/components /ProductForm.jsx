@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { ReactSortable } from 'react-sortablejs';
 import { useNavigate } from 'react-router-dom';
+import { Axios } from '../utils/api';
 function ProductForm({ method, url, product, images: productImages }) {
     const [input, setInput] = useState({});
     const [images, setImages] = useState([]);
@@ -9,7 +10,7 @@ function ProductForm({ method, url, product, images: productImages }) {
     const [properties, setProperties] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
-        axios.get(`http://localhost:8800/api/categories`).then((response) => {
+        Axios.get(`categories`).then((response) => {
             setCategoryList(response.data)
             setProperties(product.properties)
 
@@ -55,7 +56,7 @@ function ProductForm({ method, url, product, images: productImages }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios[method](`http://localhost:8800/api/${url}`, { ...input, images, properties })
+            const response = await Axios[method](`${url}`, { ...input, images, properties })
             if (response.status === 200) navigate('/products')
 
         } catch (err) {
@@ -71,7 +72,7 @@ function ProductForm({ method, url, product, images: productImages }) {
         setImages(images.filter((img) => img !== imageUrl));
         console.log(imageUrl)
         try {
-            const response = await axios.delete(`http://localhost:8800/api/products/image/${product._id}`,
+            const response = await Axios.delete(`products/image/${product._id}`,
                 { data: { imageUrl, images } })
             console.log(response)
         } catch (err) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Nav from './components /Nav'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import Home from './Pages/Home'
 import Products from './Pages/Products'
 import Orders from './Pages/Orders'
@@ -10,14 +10,28 @@ import EditProduct from './Pages/EditProduct'
 import Category from './Pages/Category'
 import Logo from './components /Logo'
 import { useLocation } from 'react-router-dom'
+import Register from './Pages/Register'
+import Login from './Pages/Login'
+import { useSelector } from 'react-redux'
 function App() {
   const [showNav, setShowNav] = useState(false);
   const pathname = useLocation();
+  const { user } = useSelector(state => state)
   console.log(pathname)
   useEffect(() => {
     setShowNav(false)
   }, [pathname])
   console.log(useLocation())
+  const ProtectedRoutes = ({ children }) => {
+    if (user.isAdmin) {
+      console.log(user)
+      return children
+    }
+    else {
+      return <Navigate to="/login" />
+    }
+  }
+
   return (
     <div className="bg-bgGray min-h-screen ">
       <div className="block md:hidden flex items-center p-4">
@@ -34,14 +48,43 @@ function App() {
         <Nav showNav={showNav} setShowNav={setShowNav} />
         <div className='flex-grow p-4'>
           <Routes>
-
-            <Route path={'/'} element={<Home />} exact></Route>
-            <Route path={'/products'} element={<Products />} exact></Route>
-            <Route path={'/orders'} element={<Orders />} exact></Route>
-            <Route path={'/settings'} element={<Settigns />} exact></Route>
-            <Route path={'/products/new'} element={<NewProducts />} exact></Route>
-            <Route path={'/products/edit/:id'} element={<EditProduct />} exact></Route>
-            <Route path={'/category'} element={<Category />} exact></Route>
+            <Route path={'/'} element={
+              <ProtectedRoutes>
+                <Home />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/products'} element={
+              <ProtectedRoutes>
+                <Products />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/orders'} element={
+              <ProtectedRoutes>
+                <Orders />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/settings'} element={
+              <ProtectedRoutes>
+                <Settigns />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/products/new'} element={
+              <ProtectedRoutes>
+                <NewProducts />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/products/edit/:id'} element={
+              <ProtectedRoutes>
+                <EditProduct />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/category'} element={
+              <ProtectedRoutes>
+                <Category />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/login'} element={<Login />} exact></Route>
+            <Route path={'/register'} element={<Register />} exact></Route>
           </Routes>
         </div>
       </div>

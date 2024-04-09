@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity, resetCart } from '../store/store'
 import Table from "../Components/Table";
 import Input from "../Components/Input";
-import { Axios } from "axios";
+import { Axios } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
 const ColumnsWrapper = styled.div`
@@ -88,7 +88,7 @@ export default function CartPage() {
   useEffect(() => {
     setProducts(cart)
   }, [cart])
-
+  console.log(cart)
   const handleChange = (e) => {
     setBillData({ ...billData, [e.target.name]: e.target.value })
   }

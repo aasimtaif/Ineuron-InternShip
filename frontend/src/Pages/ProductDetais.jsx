@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import Table from '../Components/Table'
 import ReactStars from "react-rating-stars-component";
 import { Axios } from '../utils/api';
+import axios from 'axios';
 
 const ColWrapper = styled.div`
   display: grid;

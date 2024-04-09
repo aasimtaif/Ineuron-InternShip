@@ -1,11 +1,12 @@
 import React from 'react'
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Axios } from '../utils/api';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:8800/api/orders')
+    Axios.get('http://localhost:8800/api/orders')
       .then((response) => {
         setOrders(response.data)
       })

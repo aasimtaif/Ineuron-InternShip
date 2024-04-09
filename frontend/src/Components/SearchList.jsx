@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Axios } from '../utils/api';
+import axios from 'axios';
 const SearchDiv = styled.div`
 width:min-content;
 padding-top: 10px ;

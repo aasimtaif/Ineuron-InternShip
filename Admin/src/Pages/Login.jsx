@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../store/authStore';
 import axios from 'axios';
 import { Axios } from '../utils/api';
-export default function Login() {
+export default function     Login() {
     const [inputs, setInputs] = useState({})
     const navigate = useNavigate()
     const dispatch = useDispatch()

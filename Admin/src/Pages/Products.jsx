@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { Axios } from '../utils/api';
 function Products() {
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:8800/api/products').then(response => {
+    Axios.get('http://localhost:8800/api/products').then(response => {
       setProducts(response.data);
     });
   }, []);
   const deleteProduct = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:8800/api/products/${id}`)
+      const response = await Axios.delete(`http://localhost:8800/api/products/${id}`)
       setProducts(products.filter(product => product._id !== id))
       console.log(response)
     } catch (err) {

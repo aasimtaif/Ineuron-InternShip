@@ -73,7 +73,7 @@ function Header() {
   const { cart } = useSelector(state => state.counter)
   const pathname = useLocation();
   useEffect(() => {
-    setMobileNavActive(!mobileNavActive)
+    setMobileNavActive(false)
   }, [pathname]);
   return (
     <StyledHeader>
@@ -94,7 +94,7 @@ function Header() {
           <Bars />
         </NavButton>
       </Wrapper>
-      <SearchList  />
+      <SearchList />
     </StyledHeader>
   )
 }

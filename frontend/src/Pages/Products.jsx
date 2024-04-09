@@ -3,6 +3,7 @@ import Header from "../Components/Header";
 import styled from "styled-components";
 import Center from "../Components/Center";
 import ProductsGrid from "../Components/ProductsGrid";
+import axios from 'axios';
 import { Axios } from '../utils/api';
 const Title = styled.h1`
   font-size: 1.5em;
