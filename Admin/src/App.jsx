@@ -13,6 +13,9 @@ import { useLocation } from 'react-router-dom'
 import Register from './Pages/Register'
 import Login from './Pages/Login'
 import { useSelector } from 'react-redux'
+import Users from './Pages/Users'
+import NewUser from './Pages/NewUser'
+import EditUser from './Pages/EditUser'
 function App() {
   const [showNav, setShowNav] = useState(false);
   const pathname = useLocation();
@@ -61,6 +64,21 @@ function App() {
             <Route path={'/orders'} element={
               <ProtectedRoutes>
                 <Orders />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/users'} element={
+              <ProtectedRoutes>
+                <Users />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/users/new'} element={
+              <ProtectedRoutes>
+                <NewUser />
+              </ProtectedRoutes>
+            } exact></Route>
+            <Route path={'/users/edit/:id'} element={
+              <ProtectedRoutes>
+                <EditUser />
               </ProtectedRoutes>
             } exact></Route>
             <Route path={'/settings'} element={

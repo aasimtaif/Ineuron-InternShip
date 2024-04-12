@@ -16,7 +16,7 @@ export const createOrder = async (req, res) => {
 export const getOrdersDetails = async (req, res) => {
     try {
         const orders = await orderModel.find().populate({
-            path: 'productstext-center',
+            path: 'products',
             populate: {
                 path: 'product',
                 model: 'productModel' // Assuming 'User' is the model name for the user details

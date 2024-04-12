@@ -17,8 +17,17 @@ function App() {
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
+  const ProtectedRoutes = ({ children }) => {
+    if (user) {
+      console.log(user)
+      return children
+    }
+    else {
+      return <Navigate to="/login" />
+    }
+  }
   console.log(user)
-   
+
   return (
     <React.Fragment>
       <Routes>

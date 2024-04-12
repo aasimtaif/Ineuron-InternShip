@@ -4,6 +4,7 @@ import productRoute from "./route/Products.js";
 import CategoryRoute from "./route/Category.js";
 import cartRoute from "./route/Cart.js";
 import orderRoute from "./route/Order.js";
+import userRoute from "./route/user.js";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -27,6 +28,7 @@ const DataBaseConnection = async () => {
 
 
 app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/categories", CategoryRoute);
 app.use("/api/cart", cartRoute);

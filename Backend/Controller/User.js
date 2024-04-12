@@ -45,9 +45,56 @@ export const login = async (req, res) => {
                 const { password, isAdmin, _doc, ...otherDetails } = user;
                 res
                     .status(200)
-                    .json({ details: { ..._doc}, isAdmin, token });
+                    .json({ details: { ..._doc }, isAdmin, token });
             }
         }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error)
+    }
+}
+
+
+export const getUsers = async (req, res) => {
+    try {
+        const users = await usersModel.find();
+        const userDetails = users.map((user) => {
+
+            const { password, ...details } = user._doc;
+            return details;
+        })
+        console.log(userDetails)
+        res.status(200).json(userDetails);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error)
+    }
+}
+
+export const getUser = async (req, res) => {
+    try {
+        const user = await usersModel.findById(req.params.id);
+        const { password, ...details } = user._doc;
+        res.json(details);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error)
+    }
+}
+export const UpdateUser = async (req, res) => {
+    try {
+        const user = await usersModel.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
+        res.json(user);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error)
+    }
+}
+
+export const deleteUser = async (req, res) => {
+    try {
+        await usersModel.findByIdAndDelete(req.params.id);
+        res.json({ message: 'User deleted successfully' });
     } catch (error) {
         console.log(error)
         res.status(500).json(error)
