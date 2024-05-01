@@ -1,6 +1,7 @@
 import React from 'react'
 
-function Account() {
+function Account({user}) {
+  
   return (
     <div>Account</div>
   )

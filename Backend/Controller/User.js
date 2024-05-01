@@ -63,7 +63,7 @@ export const getUsers = async (req, res) => {
             const { password, ...details } = user._doc;
             return details;
         })
-        console.log(userDetails)
+        // console.log(userDetails)
         res.status(200).json(userDetails);
     } catch (error) {
         console.log(error)

@@ -8,6 +8,7 @@ function ProductForm({ method, url, product, images: productImages }) {
     const [images, setImages] = useState([]);
     const [categoryList, setCategoryList] = useState([])
     const [properties, setProperties] = useState([]);
+    const [newProperties, setNewProperties] = useState([])
     const navigate = useNavigate()
     useEffect(() => {
         Axios.get(`categories`).then((response) => {
@@ -19,6 +20,12 @@ function ProductForm({ method, url, product, images: productImages }) {
         })
 
     }, [])
+    const finalProperties = [...newProperties].map(p => ({
+        [p.name]: p.values,
+    })).reduce((acc, item) => {
+        return { ...acc, ...item };
+    }, {});
+    // console.log(newP)
     useEffect(() => {
         setInput({ name: product?.name, description: product?.description, price: product?.price, category: product?.category })
         setImages(productImages)
@@ -55,8 +62,9 @@ function ProductForm({ method, url, product, images: productImages }) {
     }
     const handleSubmit = async (e) => {
         e.preventDefault()
+
         try {
-            const response = await Axios[method](`${url}`, { ...input, images, properties })
+            const response = await Axios[method](`${url}`, { ...input, images, properties: { ...properties, ...finalProperties } })
             if (response.status === 200) navigate('/products')
 
         } catch (err) {
@@ -78,6 +86,7 @@ function ProductForm({ method, url, product, images: productImages }) {
         } catch (err) {
             console.log(err)
         }
+
     }
     function setProductProp(propName, value) {
         setProperties(prev => {
@@ -86,8 +95,32 @@ function ProductForm({ method, url, product, images: productImages }) {
             return newProductProps;
         });
     }
-
-
+    function addProperty() {
+        setNewProperties(prev => {
+            return [...prev, { name: '', values: '' }];
+        });
+    }
+    function handlePropertyNameChange(index, property, newName) {
+        setNewProperties(prev => {
+            const properties = [...prev];
+            properties[index].name = newName;
+            return properties;
+        });
+    }
+    function handlePropertyValuesChange(index, property, newValues) {
+        setNewProperties(prev => {
+            const properties = [...prev];
+            properties[index].values = newValues;
+            return properties;
+        });
+    }
+    function removeProperty(indexToRemove) {
+        setNewProperties(prev => {
+            return [...prev].filter((p, pIndex) => {
+                return pIndex !== indexToRemove;
+            });
+        });
+    }
     const propertiesToFill = [];
     if (categoryList.length > 0 && input.category) {
         let catInfo = categoryList.find(({ _id }) => _id === input.category);
@@ -113,6 +146,38 @@ function ProductForm({ method, url, product, images: productImages }) {
                         <option key={category._id} value={category._id}>{category.name}</option>
                     ))}
                 </select>
+
+                <label className="block">Properties</label>
+                <button
+                    onClick={addProperty}
+                    type="button"
+                    className="btn-default text-sm mb-2">
+                    Add new property
+                </button>
+                {newProperties.length > 0 && newProperties.map((property, index) => (
+                    <div key={index} className="flex gap-1 mb-2">
+                        <input type="text"
+                            value={property.name}
+                            className="mb-0"
+                            onChange={ev => handlePropertyNameChange(index, property, ev.target.value)}
+                            placeholder="property name (example: color)" autoFocus={true} />
+                        <input type="text"
+                            className="mb-0"
+                            onChange={ev =>
+                                handlePropertyValuesChange(
+                                    index,
+                                    property, ev.target.value
+                                )}
+                            value={property.values}
+                            placeholder="Provide values" />
+                        <button
+                            onClick={() => removeProperty(index)}
+                            type="button"
+                            className="btn-red">
+                            Remove
+                        </button>
+                    </div>
+                ))}
                 {propertiesToFill.length > 0 && propertiesToFill?.map((p, index) => (
                     <div key={p.index} className="">
                         <label>{p?.name[0].toUpperCase() + p?.name.substring(1)}</label>
@@ -130,6 +195,7 @@ function ProductForm({ method, url, product, images: productImages }) {
                         </div>
                     </div>
                 ))}
+                <br />
                 <label>
                     Photos
                 </label>

@@ -72,7 +72,7 @@ function App() {
           element={
             <ProtectedRoutes>
               <Header />
-              <Account />
+              <Account user={user} />
             </ProtectedRoutes>
           } />
         <Route path='*' element={<div>404</div>} />
