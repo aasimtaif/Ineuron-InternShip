@@ -61,15 +61,23 @@ export const getProduct = async (req, res) => {
 }
 export const getFeaturedProducts = async (req, res) => {
     try {
-        const products = await productModel.findById("66069926c00e8894a884fdc4").populate({
-            path: 'review',
-            populate: {
-                path: 'userId',
-                model: 'usersModel'
-            }
-        });
+        // const products = await productModel.findById("66069926c00e8894a884fdc4").populate({
+        //     path: 'review',
+        //     populate: {
+        //         path: 'userId',
+        //         model: 'usersModel'
+        //     }
+        // });
         // console.log(products)
-        res.status(200).json(products);
+        // res.status(200).json(products);
+
+        const count = await productModel.countDocuments();
+
+
+        const randomIndex = Math.floor(Math.random() * count);
+
+        const randomProduct = await productModel.findOne().skip(randomIndex);
+        res.status(200).json(randomProduct);
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Error getting featured products', error });
