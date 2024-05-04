@@ -60,6 +60,11 @@ export const ButtonStyle = css`
       height: 20px;
     }
   `}
+  ${props => props.red  && css`
+    background-color: #BF0000;
+    color: #fff;
+    border: 1px solid #ff0000;
+  `}
 `;
 
 const StyledButton = styled.button`

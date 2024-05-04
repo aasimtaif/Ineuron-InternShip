@@ -29,7 +29,6 @@ export const login = async (req, res) => {
         const user = await usersModel.findOne({
             email
         });
-        console.log(user)
         if (!user) {
             res.status(400).json({ error: 'User not found' });
         } else {
@@ -42,10 +41,11 @@ export const login = async (req, res) => {
                     process.env.JWT
                 );
 
-                const { password, isAdmin, _doc, ...otherDetails } = user;
+                const { _doc: { password, isAdmin, ...details }, ...otherDetails } = user;
+                console.log(password, isAdmin, details)
                 res
                     .status(200)
-                    .json({ details: { ..._doc }, isAdmin, token });
+                    .json({ details: { ...details }, isAdmin, token });
             }
         }
     } catch (error) {

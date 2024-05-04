@@ -209,6 +209,7 @@ function ProductDetais() {
                     isHalf='true'
                     activeColor="#ffd700"
                     value={review.rating}
+                    defaultValue={0}
                 />
                 <Button primary onClick={handleReviewSubmit}>Submit</Button>
             </Box>
@@ -218,7 +219,7 @@ function ProductDetais() {
                     <>
                         {product?.review?.map((review, index) => {
                             return (
-                                <Review>
+                                <Review key={review._id}>
                                     <Comment>{review?.comment}</Comment>
                                     <User>~{review?.userId?.userName}</User>
                                     <ReactStars

@@ -28,3 +28,19 @@ export const getOrdersDetails = async (req, res) => {
         res.status(500).json({ message: e.message });
     }
 }
+
+export const getOrdersDetailsByUserId = async (req, res) => {
+    try {
+        const orders = await orderModel.find({ userId: req.params.id }).populate({
+            path: 'products',
+            populate: {
+                path: 'product',
+                model: 'productModel' // Assuming 'User' is the model name for the user details
+            }
+        }).sort({ createdAt: -1 });
+        res.status(200).json(orders);
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ message: e.message });
+    }
+}

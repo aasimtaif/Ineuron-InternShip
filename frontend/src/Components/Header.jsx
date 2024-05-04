@@ -69,7 +69,7 @@ const NavButton = styled.button`
 
 function Header() {
   const [mobileNavActive, setMobileNavActive] = useState(false);
-
+  const { user } = useSelector(state => state.auth)
   const { cart } = useSelector(state => state.counter)
   const pathname = useLocation();
   useEffect(() => {
@@ -86,7 +86,7 @@ function Header() {
           <NavLink to="/products" >Products</NavLink>
           {/* <NavLink to="/category" >Category</NavLink> */}
           <NavLink to="/cart" >Cart({cart?.length})</NavLink>
-          <NavLink to="/account" >Account</NavLink>
+          <NavLink to={`/account/${user._id}`}>Account</NavLink>
 
         </StyledNav>
 

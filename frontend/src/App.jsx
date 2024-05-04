@@ -68,7 +68,7 @@ function App() {
               <Cart />
             </ProtectedRoutes>
           } />
-        <Route path='/account'
+        <Route path='/account/:id'
           element={
             <ProtectedRoutes>
               <Header />

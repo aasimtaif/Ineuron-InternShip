@@ -68,7 +68,7 @@ export const getFeaturedProducts = async (req, res) => {
                 model: 'usersModel'
             }
         });
-        console.log(products)
+        // console.log(products)
         res.status(200).json(products);
     } catch (error) {
         console.log(error)
@@ -92,7 +92,7 @@ export const searchProducts = async (req, res) => {
                 model: 'usersModel' // Assuming 'User' is the model name for the user details
             }
         });
-        console.log(products)
+        // console.log(products)
         res.status(200).json(products);
     } catch (error) {
         console.log(error)
