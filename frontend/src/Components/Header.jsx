@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { resetUser } from '../store/authStore';
 import styled from "styled-components";
 import Bars from './icons/Bars';
+import Button from './Button';
 import { useLocation } from 'react-router-dom'
 import SearchList from './SearchList';
 
@@ -71,10 +73,16 @@ function Header() {
   const [mobileNavActive, setMobileNavActive] = useState(false);
   const { user } = useSelector(state => state.auth)
   const { cart } = useSelector(state => state.counter)
+  const dispatch = useDispatch()
   const pathname = useLocation();
   useEffect(() => {
     setMobileNavActive(false)
   }, [pathname]);
+
+  const handleLogOut = (e) => {
+    e.preventDefault()
+    dispatch(resetUser())
+  }
   return (
     <StyledHeader>
       <Wrapper>
@@ -86,7 +94,12 @@ function Header() {
           <NavLink to="/products" >Products</NavLink>
           {/* <NavLink to="/category" >Category</NavLink> */}
           <NavLink to="/cart" >Cart({cart?.length})</NavLink>
-          <NavLink to={`/account/${user._id}`}>Account</NavLink>
+          {user?._id ?
+            <NavLink to={`/account/${user._id}`}>Account</NavLink>
+            :
+            <NavLink to="/login" >Login</NavLink>
+          }
+          {user?._id && <Button outline white size='s' onClick={handleLogOut} >Logout</Button>}
 
         </StyledNav>
 

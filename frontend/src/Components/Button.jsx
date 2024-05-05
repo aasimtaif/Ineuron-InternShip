@@ -60,7 +60,15 @@ export const ButtonStyle = css`
       height: 20px;
     }
   `}
-  ${props => props.red  && css`
+  ${props => props.size === 's' && css`
+    font-size:0.8rem;
+    font-weight: 600;
+    padding: 1px 2px;
+    svg{
+      height: 18px;
+    }
+  `}
+  ${props => props.red && css`
     background-color: #BF0000;
     color: #fff;
     border: 1px solid #ff0000;
@@ -72,7 +80,7 @@ const StyledButton = styled.button`
 `;
 
 export default function Button({ children, ...rest }) {
-    return (
-        <StyledButton {...rest}>{children}</StyledButton>
-    );
+  return (
+    <StyledButton {...rest}>{children}</StyledButton>
+  );
 }

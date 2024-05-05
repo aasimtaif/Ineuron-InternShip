@@ -45,7 +45,7 @@ export const login = async (req, res) => {
                 console.log(password, isAdmin, details)
                 res
                     .status(200)
-                    .json({ details: { ...details }, isAdmin, token });
+                    .json({ details: { ...details,isAdmin },  token });
             }
         }
     } catch (error) {

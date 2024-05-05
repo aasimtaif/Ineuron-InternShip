@@ -34,7 +34,7 @@ function Users() {
                         <td>Name</td>
                         <td>Email</td>
                         <td>Phone</td>
-                        <td>address</td>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -43,8 +43,6 @@ function Users() {
                             <td>{user?.userName}</td>
                             <td>{user?.email}</td>
                             <td>{user?.phone}</td>
-
-                            <td className='text-sm'>{user?.address}</td>
                             <td>
                                 <Link to={`/users/edit/${user._id}`} className="btn-default" >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">

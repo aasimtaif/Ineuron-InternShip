@@ -4,7 +4,8 @@ import { Axios } from '../utils/api'
 import { useParams } from 'react-router-dom';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
-
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 const Box = styled.div`
 width: 100%;
 display: flex;
@@ -83,7 +84,7 @@ width: 100%;
 background-color: #222;
 color: #f5f0f0;
 font-weight: 500;
-font-size: 0.85rem;
+font-size: 0.9rem;
 border-radius: 5px;
 `
 
@@ -92,7 +93,8 @@ display: flex;
 flex-direction: row;
 padding: 5px;
 font-weight: 900;
-font-size: 0.85rem;
+font-size: 0.75rem;
+border-bottom: 1px solid #f5f0f0;
 padding-top: 5px;
 justify-content: space-between;
 width: 100%;
@@ -114,32 +116,22 @@ width: 100%;
 `
 
 const initialUser = {
-  userName: 'JohnDoe',
-  email: 'johndoe@example.com',
-  address: '123 Main Street',
-  phone: '555-1234'
+  userName: '',
+  email: '',
+  address: '',
+  phone: ''
 }
 
 function Account() {
-  const [user, setUser] = useState(initialUser);
-  const [input, setInput] = useState(initialUser)
+  const { user } = useSelector(state => state.auth)
+  const [input, setInput] = useState(user)
   const [orders, setOrders] = useState([]);
   const { id } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
-    fetchUser()
     fetchOrders()
   }, [])
   console.log(orders)
-  const fetchUser = async () => {
-    try {
-      const response = await Axios.get(`users/${id}`)
-      setUser(response.data)
-      setInput(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   const fetchOrders = async () => {
     try {
       const response = await Axios.get(`orders/${id}`)
@@ -152,15 +144,13 @@ function Account() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
-    if (user?.[name] === value) {
-      const { [name]: deletedValue, ...updatedInput } = input;
-      setInput(updatedInput);
-    }
+
   }
   const handleDismiss = () => {
     setInput(user);
   }
 
+  if (!user?._id) return navigate('/login')
   console.log(input)
   return (
     <Box>
@@ -200,7 +190,6 @@ function Account() {
               <OrderDiv key={order._id}>
                 <h3>Order ID: {order._id}</h3>
                 <p>Order Date: {new Date(order.createdAt).toDateString()}</p>
-                <p>Order Total: ${order.totalPrice}</p>
                 {order.products.map(product => (
                   <OrderProduct key={product._id}>
                     <p> {product.product.name}</p>
@@ -208,6 +197,7 @@ function Account() {
                   </OrderProduct>
 
                 ))}
+                <p>Order Total: ${order.totalPrice}</p>
               </OrderDiv>
             ))}
           </OrderList>

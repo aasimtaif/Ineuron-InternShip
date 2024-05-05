@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../store/authStore';
 import axios from 'axios';
 import { Axios } from '../utils/api';
-export default function     Login() {
+export default function Login() {
     const [inputs, setInputs] = useState({})
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -17,8 +17,8 @@ export default function     Login() {
         try {
             const res = await Axios.post('auth/login', inputs)
             if (res.status === 200) {
-                dispatch(setUser(res.data))
-                localStorage.setItem('user', JSON.stringify(res.data.details))
+                dispatch(setUser(res.data.details))
+                localStorage.setItem('user', JSON.stringify(res.data.details, res.data.isAdmin))
                 localStorage.setItem('token', JSON.stringify(res.data.token))
 
                 navigate('/')

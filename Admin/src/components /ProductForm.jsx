@@ -3,8 +3,10 @@ import axios from 'axios';
 import { ReactSortable } from 'react-sortablejs';
 import { useNavigate } from 'react-router-dom';
 import { Axios } from '../utils/api';
+import { Rings } from 'react-loader-spinner';
 function ProductForm({ method, url, product, images: productImages }) {
     const [input, setInput] = useState({});
+    const [isLoading, setIsLoading] = useState(false)
     const [images, setImages] = useState([]);
     const [categoryList, setCategoryList] = useState([])
     const [properties, setProperties] = useState([]);
@@ -39,6 +41,7 @@ function ProductForm({ method, url, product, images: productImages }) {
 
     const uploadImages = async (e) => {
         const file = e.target.files[0];
+        setIsLoading(true)
         try {
             const data = new FormData();
             data.append("file", file);
@@ -58,7 +61,7 @@ function ProductForm({ method, url, product, images: productImages }) {
             console.log(error)
         }
 
-        console.log(images)
+        setIsLoading(false)
     }
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -132,6 +135,7 @@ function ProductForm({ method, url, product, images: productImages }) {
         }
     }
     console.log(propertiesToFill)
+
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -217,7 +221,11 @@ function ProductForm({ method, url, product, images: productImages }) {
                             </div>
                         ))}
                     </ReactSortable>
-                    <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white shadow-sm border border-primary">
+                    {isLoading ? <Rings
+                        visible={true}
+                        color="#4fa94d"
+                        ariaLabel="rings-loading"
+                    /> : <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white shadow-sm border border-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                         </svg>
@@ -225,7 +233,7 @@ function ProductForm({ method, url, product, images: productImages }) {
                             Add image
                         </div>
                         <input type="file" onChange={uploadImages} className="hidden" />
-                    </label>
+                    </label>}
                 </div>
                 <label >Description</label>
                 <textarea required name='description' value={input?.description} placeholder='Product description'

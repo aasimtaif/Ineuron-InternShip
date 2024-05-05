@@ -11,7 +11,6 @@ import { useParams } from 'react-router-dom';
 import Table from '../Components/Table'
 import ReactStars from "react-rating-stars-component";
 import { Axios } from '../utils/api';
-import axios from 'axios';
 
 const ColWrapper = styled.div`
   display: grid;
@@ -46,7 +45,7 @@ const Title = styled.h1`
   font-size: 1.5em;
   font-weight: 600;
 `;
-const Box = styled.div`
+const Box = styled.form`
 
   display: flex;
   justify-content: start;
@@ -55,7 +54,7 @@ const Box = styled.div`
 gap: 20px;
 textarea {
     flex: 1; 
-    height: 2rem;
+    height: 5rem;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing:border-box;
@@ -105,7 +104,6 @@ color: 1c1c1c;
 
 `
 
-
 function ProductDetais() {
     const { id } = useParams();
     const [product, setProduct] = useState();
@@ -121,6 +119,7 @@ function ProductDetais() {
             console.log(e)
         }
         getProductData()
+        setReview({ rating: 0, comment: '' })
 
     }
     const dispatch = useDispatch();
@@ -200,8 +199,8 @@ function ProductDetais() {
                     </tbody>}
                 </Table>
             </ColWrapper>
-            <Box>
-                <textarea placeholder="   Write Your review" onChange={(e) => { setReview({ ...review, comment: e.target.value }) }} />
+            <Box onSubmit={handleReviewSubmit}>
+                <textarea placeholder="   Write Your review"  onChange={(e) => { setReview({ ...review, comment: e.target.value }) }} required />
                 <ReactStars
                     count={5}
                     onChange={ratingChanged}
@@ -210,8 +209,9 @@ function ProductDetais() {
                     activeColor="#ffd700"
                     value={review.rating}
                     defaultValue={0}
+
                 />
-                <Button primary onClick={handleReviewSubmit}>Submit</Button>
+                <Button primary type="submit">Submit</Button>
             </Box>
             <ReviewList>
                 <h1>Reviews</h1>

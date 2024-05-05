@@ -2,7 +2,6 @@ import { categoryModel } from "../Model/Category.model.js";
 
 export const addCategory = async (req, res) => {
     const { name, parentCategory, properties } = req.body;
-    console.log(name, parentCategory)
     try {
         const categoryDoc = await categoryModel.create({
             name,

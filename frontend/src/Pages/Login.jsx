@@ -17,13 +17,12 @@ export default function Login() {
         try {
             const res = await Axios.post('auth/login', inputs)
             if (res.status === 200) {
-                dispatch(setUser(res.data))
+                dispatch(setUser(res.data.details))
                 localStorage.setItem('user', JSON.stringify(res.data.details))
                 localStorage.setItem('token', JSON.stringify(res.data.token))
 
                 navigate('/')
             }
-            console.log(res)
         } catch (error) {
             console.error(error)
         }

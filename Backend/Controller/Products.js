@@ -1,7 +1,6 @@
 
 import { productModel } from "../Model/Product.model.js";
 export const addProducts = async (req, res) => {
-    console.log(req.body)
     try {
         const product = await productModel.create(req.body);
         res.status(200).json(product);
@@ -61,21 +60,8 @@ export const getProduct = async (req, res) => {
 }
 export const getFeaturedProducts = async (req, res) => {
     try {
-        // const products = await productModel.findById("66069926c00e8894a884fdc4").populate({
-        //     path: 'review',
-        //     populate: {
-        //         path: 'userId',
-        //         model: 'usersModel'
-        //     }
-        // });
-        // console.log(products)
-        // res.status(200).json(products);
-
         const count = await productModel.countDocuments();
-
-
         const randomIndex = Math.floor(Math.random() * count);
-
         const randomProduct = await productModel.findOne().skip(randomIndex);
         res.status(200).json(randomProduct);
     } catch (error) {
@@ -111,7 +97,6 @@ export const searchProducts = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
-    console.log(id, req.body)
     try {
         const product = await productModel.findByIdAndUpdate(id, req.body, { new: true, useFindAndModify: false });
         res.status(200).json(product);

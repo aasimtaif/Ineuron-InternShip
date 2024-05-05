@@ -27,7 +27,6 @@ function App() {
   console.log(useLocation())
   const ProtectedRoutes = ({ children }) => {
     if (user.isAdmin) {
-      console.log(user)
       return children
     }
     else {

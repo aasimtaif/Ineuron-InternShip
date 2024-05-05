@@ -25,6 +25,10 @@ div{
     border-radius: 5px;
 }
 `
+const ProductName = styled.h3`
+cursor: pointer;
+color: #000;
+`
 function SearchList() {
     const [products, setProducts] = useState(null);
     const [search, setSearch] = useState();
@@ -60,7 +64,7 @@ function SearchList() {
                                 setProducts(null)
                                 setSearch('')
                             }} key={product._id}>
-                                <h3>{product.name}</h3>
+                                <ProductName>{product.name}</ProductName>
                             </div>
                         )
                     })}
