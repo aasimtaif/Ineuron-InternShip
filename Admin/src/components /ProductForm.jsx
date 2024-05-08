@@ -4,41 +4,62 @@ import { ReactSortable } from 'react-sortablejs';
 import { useNavigate } from 'react-router-dom';
 import { Axios } from '../utils/api';
 import { Rings } from 'react-loader-spinner';
-function ProductForm({ method, url, product, images: productImages }) {
+function ProductForm({ method, url, product, images: productImages, propertyName
+    , propertyValue }) {
     const [input, setInput] = useState({});
     const [isLoading, setIsLoading] = useState(false)
     const [images, setImages] = useState([]);
-    const [categoryList, setCategoryList] = useState([])
-    const [properties, setProperties] = useState([]);
-    const [newProperties, setNewProperties] = useState([])
+    const [categoryList, setCategoryList] = useState()
+    const [searchCategory, setSearchCategory] = useState('')
+    const [propertyFieldNames, setPropertyFieldNames] = useState(propertyName || []);
+    const [propertyFieldValues, setPropertyFieldValues] = useState(propertyValue || [])
+    const [showList, setShowList] = useState(false)
     const navigate = useNavigate()
+
+
+
     useEffect(() => {
-        Axios.get(`categories`).then((response) => {
-            setCategoryList(response.data)
-            setProperties(product.properties)
+        if (product) {
+            findCategory()
+        }
+    }, [])
+    const findCategory = () => {
+        Axios.get(`categories/find/${product.category}`).then((response) => {
+            setSearchCategory(response.data.name)
 
         }).catch((err) => {
             console.log(err)
         })
+    }
+    useEffect(() => {
+        let debounceTimer;
+        const delay = 400; // Adjust debounce delay as needed
+        if (searchCategory) {
+            debounceTimer = setTimeout(async () => {
+                try {
+                    const response = await Axios.get(`categories/search?name=${searchCategory}`);
+                    setCategoryList(response.data);
 
-    }, [])
-    const finalProperties = [...newProperties].map(p => ({
-        [p.name]: p.values,
-    })).reduce((acc, item) => {
-        return { ...acc, ...item };
-    }, {});
-    // console.log(newP)
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }, delay);
+        }
+
+        return () => clearTimeout(debounceTimer);
+    }, [searchCategory]);
+
+    // console.log(categoryList)
+
     useEffect(() => {
         setInput({ name: product?.name, description: product?.description, price: product?.price, category: product?.category })
         setImages(productImages)
-        setProperties(product?.properties)
-
 
     }, [product])
+
     const handleChange = (event) => {
         setInput({ ...input, [event.target.name]: event.target.value })
     }
-
     const uploadImages = async (e) => {
         const file = e.target.files[0];
         setIsLoading(true)
@@ -65,9 +86,14 @@ function ProductForm({ method, url, product, images: productImages }) {
     }
     const handleSubmit = async (e) => {
         e.preventDefault()
-
         try {
-            const response = await Axios[method](`${url}`, { ...input, images, properties: { ...properties, ...finalProperties } })
+            const response = await Axios[method](`${url}`, {
+                ...input, images, properties: {
+                    ...propertyFieldNames.reduce((acc, item, index) => {
+                        return { ...acc, [item]: propertyFieldValues[index] }
+                    }, {})
+                }
+            })
             if (response.status === 200) navigate('/products')
 
         } catch (err) {
@@ -81,61 +107,77 @@ function ProductForm({ method, url, product, images: productImages }) {
     const handleDeleteImage = async (e, imageUrl) => {
         e.preventDefault()
         setImages(images.filter((img) => img !== imageUrl));
-        console.log(imageUrl)
+        // console.log(imageUrl)
         try {
             const response = await Axios.delete(`products/image/${product._id}`,
                 { data: { imageUrl, images } })
-            console.log(response)
+            // console.log(response)
         } catch (err) {
             console.log(err)
         }
 
     }
-    function setProductProp(propName, value) {
-        setProperties(prev => {
-            const newProductProps = { ...prev };
-            newProductProps[propName] = value;
-            return newProductProps;
-        });
+    const addProperties = () => {
+        setPropertyFieldNames([...propertyFieldNames, ''])
+        setPropertyFieldValues([...propertyFieldValues, ''])
     }
-    function addProperty() {
-        setNewProperties(prev => {
-            return [...prev, { name: '', values: '' }];
-        });
+
+    const handlePropertyNameChange = (index, property, value) => {
+        const newProperties = [...propertyFieldNames]
+        newProperties[index] = value
+        setPropertyFieldNames(newProperties)
     }
-    function handlePropertyNameChange(index, property, newName) {
-        setNewProperties(prev => {
-            const properties = [...prev];
-            properties[index].name = newName;
-            return properties;
-        });
+    const handlePropertyValuesChange = (index, property, value) => {
+        const newProperties = [...propertyFieldValues]
+        newProperties[index] = value
+        setPropertyFieldValues(newProperties)
     }
-    function handlePropertyValuesChange(index, property, newValues) {
-        setNewProperties(prev => {
-            const properties = [...prev];
-            properties[index].values = newValues;
-            return properties;
-        });
+
+    const removeProperty = (index) => {
+        const newProperties = [...propertyFieldNames]
+        const newValues = [...propertyFieldValues]
+        newProperties.splice(index, 1)
+        setPropertyFieldNames(newProperties)
+        newValues.splice(index, 1)
+        setPropertyFieldValues(newValues)
+
     }
-    function removeProperty(indexToRemove) {
-        setNewProperties(prev => {
-            return [...prev].filter((p, pIndex) => {
-                return pIndex !== indexToRemove;
-            });
-        });
+    const handleCategorySelect = (category) => {
+        // console.log(category)
+        setInput({ ...input, category: category._id })
+        setSearchCategory(category.name)
+        setCategoryList([])
+        setShowList(false)
+        // if (propertyFieldNames.length === 0 && propertyFieldValues.length === 0) {
+        AssignProperties(category.properties, category._id)
+        // }
     }
-    const propertiesToFill = [];
-    if (categoryList.length > 0 && input.category) {
-        let catInfo = categoryList.find(({ _id }) => _id === input.category);
-        propertiesToFill.push(...catInfo.properties);
-        while (catInfo?.parent?._id) {
-            const parentCat = categoryList.find(({ _id }) => _id === catInfo?.parent?._id);
-            propertiesToFill.push(...parentCat.properties);
-            catInfo = parentCat;
+
+    const AssignProperties = (properties, id) => {
+        const names = properties.map(obj => obj.name)
+            .filter(name => !propertyFieldNames.includes(name));
+        const values = []
+        names.forEach(() => {
+            values.push('')
+        })
+        // console.log(names, values)
+        
+        setPropertyFieldNames([...propertyName, ...names])
+        setPropertyFieldValues([...propertyValue, ...values])
+    }
+    // console.log(propertyFieldNames, propertyFieldValues)
+    const handleCategoryUpload = async () => {
+        try {
+            const response = await Axios.post('categories', { name: searchCategory })
+            // console.log(response)
+            setSearchCategory(response.data.name)
+            setCategoryList([])
+            setShowList(false)
+            setInput({ ...input, category: response.data._id })
+        } catch (err) {
+            console.log(err)
         }
     }
-    console.log(propertiesToFill)
-
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -144,61 +186,70 @@ function ProductForm({ method, url, product, images: productImages }) {
                     onChange={handleChange}
                 />
                 <label >Category</label>
-                <select value={input?.category} name='category' onChange={handleChange}>
-                    <option value={''}>None</option>
-                    {categoryList.length > 0 && categoryList.map(category => (
-                        <option key={category._id} value={category._id}>{category.name}</option>
-                    ))}
-                </select>
+                <div id="dropdownSearch" class="z-0 w-100  mb-5 rounde-lg">
+                    <div class="flex gap-2 flex-row justify-center">
+                        <input value={searchCategory} name='category' className='flex-3' onChange={(event) => {
+                            setSearchCategory(event.target.value)
+                            setCategoryList([])
+                            setShowList(true)
 
-                <label className="block">Properties</label>
-                <button
-                    onClick={addProperty}
-                    type="button"
-                    className="btn-default text-sm mb-2">
-                    Add new property
-                </button>
-                {newProperties.length > 0 && newProperties.map((property, index) => (
-                    <div key={index} className="flex gap-1 mb-2">
-                        <input type="text"
-                            value={property.name}
-                            className="mb-0"
-                            onChange={ev => handlePropertyNameChange(index, property, ev.target.value)}
-                            placeholder="property name (example: color)" autoFocus={true} />
-                        <input type="text"
-                            className="mb-0"
-                            onChange={ev =>
-                                handlePropertyValuesChange(
-                                    index,
-                                    property, ev.target.value
-                                )}
-                            value={property.values}
-                            placeholder="Provide values" />
-                        <button
-                            onClick={() => removeProperty(index)}
-                            type="button"
-                            className="btn-red">
-                            Remove
-                        </button>
+                        }} />
+                        {categoryList?.length === 0 && showList && <button className='flex-1 btn-primary h-10'
+                            onClick={handleCategoryUpload}
+                            type='button'
+                        >+</button>}
                     </div>
-                ))}
-                {propertiesToFill.length > 0 && propertiesToFill?.map((p, index) => (
-                    <div key={p.index} className="">
-                        <label>{p?.name[0].toUpperCase() + p?.name.substring(1)}</label>
-                        <div>
-                            <select value={properties?.[p?.name]}
+                    <ul class="  overflow-y-auto text-sm shadow-xl  ">
+                        {categoryList?.length > 0 && showList && categoryList.map(category => (
+                            <li className='border-b border-slate-400/50 rounded-sm'>
+                                <div class="flex items-center  rounded hover:bg-gray-300  ">
+                                    <label class="w-full pl-2 m-2 text-sm font-medium text-neutral-600  "
+                                        onClick={() => {
+                                            handleCategorySelect(category)
+                                        }}
+                                    >{category.name}</label>
+                                </div>
+                            </li>
+                        ))}
+
+
+                    </ul>
+
+                </div>
+                <>
+                    <label className="block">Properties</label>
+                    <button
+                        onClick={addProperties}
+                        type="button"
+                        className="btn-default text-sm mb-2">
+                        Add new property
+                    </button>
+                    {propertyFieldNames.length > 0 && propertyFieldValues.length > 0 && propertyFieldNames.map((property, index) => (
+                        <div key={index} className="flex gap-1 mb-2">
+                            <input type="text"
+                                value={property}
+                                className="mb-0"
+                                onChange={ev => handlePropertyNameChange(index, property, ev.target.value)}
+                                placeholder="property name (example: color)" autoFocus={true} />
+                            <input type="text"
+                                className="mb-0"
                                 onChange={ev =>
-                                    setProductProp(p?.name, ev.target.value)
-                                }
-                            >
-                                <option value={''}>None</option>
-                                {p?.values.map(v => (
-                                    <option key={v} value={v}>{v}</option>
-                                ))}
-                            </select>
+                                    handlePropertyValuesChange(
+                                        index,
+                                        property, ev.target.value
+                                    )}
+                                value={propertyFieldValues[index]}
+                                placeholder="Provide values" />
+                            <button
+                                onClick={() => removeProperty(index)}
+                                type="button"
+                                className="btn-red">
+                                Remove
+                            </button>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </>
+
                 <br />
                 <label>
                     Photos
@@ -237,6 +288,7 @@ function ProductForm({ method, url, product, images: productImages }) {
                 </div>
                 <label >Description</label>
                 <textarea required name='description' value={input?.description} placeholder='Product description'
+                className='w-full h-24 p-2 rounded-sm border border-gray-200 shadow-sm mb-2'
                     onChange={handleChange}
                 ></textarea>
                 <label >Price (in ₹) </label>

@@ -61,7 +61,6 @@ export default function Featured({ product }) {
   const { cart } = useSelector(state => state.counter)
   const dispatch = useDispatch()
   const cartProduct = cart?.find(({ _id }) => _id === product?._id)
-  console.log(cart)
   return (
     <Bg>
       <Center>

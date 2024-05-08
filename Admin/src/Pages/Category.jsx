@@ -23,7 +23,6 @@ function Categories({ swal }) {
       parentCategory,
       properties: properties.map(p => ({
         name: p.name,
-        values: p.values.split(','),
       })),
     };
     if (editedCategory) {
@@ -44,8 +43,7 @@ function Categories({ swal }) {
     setParentCategory(category.parent?._id);
     setProperties(
       category.properties.map(({ name, values }) => ({
-        name,
-        values: values.join(',')
+        name
       }))
     );
   }
@@ -68,20 +66,13 @@ function Categories({ swal }) {
   }
   function addProperty() {
     setProperties(prev => {
-      return [...prev, { name: '', values: '' }];
+      return [...prev, { name: ''}];
     });
   }
   function handlePropertyNameChange(index, property, newName) {
     setProperties(prev => {
       const properties = [...prev];
       properties[index].name = newName;
-      return properties;
-    });
-  }
-  function handlePropertyValuesChange(index, property, newValues) {
-    setProperties(prev => {
-      const properties = [...prev];
-      properties[index].values = newValues;
       return properties;
     });
   }
@@ -108,15 +99,6 @@ function Categories({ swal }) {
             onChange={ev => setName(ev.target.value)}
             value={name}
             required />
-          <select
-
-            onChange={ev => setParentCategory(ev.target.value)}
-            value={parentCategory}>
-            <option value="">No parent category</option>
-            {categories?.length > 0 && categories?.map(category => (
-              <option key={category._id} value={category._id}>{category.name}</option>
-            ))}
-          </select>
         </div>
         <div className="mb-2">
           <label className="block">Properties</label>
@@ -133,15 +115,6 @@ function Categories({ swal }) {
                 className="mb-0"
                 onChange={ev => handlePropertyNameChange(index, property, ev.target.value)}
                 placeholder="property name (example: color)" autoFocus={true} />
-              <input type="text"
-                className="mb-0"
-                onChange={ev =>
-                  handlePropertyValuesChange(
-                    index,
-                    property, ev.target.value
-                  )}
-                value={property.values}
-                placeholder="values, comma separated" />
               <button
                 onClick={() => removeProperty(index)}
                 type="button"
@@ -174,15 +147,13 @@ function Categories({ swal }) {
           <thead>
             <tr>
               <td>Category name</td>
-              <td>Parent category</td>
-              <td></td>
+              <td>Actions</td>
             </tr>
           </thead>
           <tbody>
             {categories.length > 0 && categories.map(category => (
               <tr key={category._id}>
                 <td>{category.name}</td>
-                <td>{category?.parent?.name}</td>
                 <td>
                   <button
                     onClick={() => editCategory(category)}

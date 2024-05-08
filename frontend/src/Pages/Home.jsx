@@ -30,7 +30,6 @@ function Home() {
     }
 
     const cart = JSON.parse(localStorage.getItem('cart'))
-    console.log(cart)
     return (
         <div>
             <Featured product={product} />

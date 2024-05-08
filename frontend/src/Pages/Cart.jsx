@@ -125,6 +125,82 @@ export default function CartPage() {
     const price = productId.price * productId.quantity;
     total += price;
   }
+  const checkouthandler = async (event) => {
+    const amount = 500;
+    const currency = 'INR';
+    const receiptId = '1234567890';
+
+    const response = await fetch('http://localhost:8800/api/payments/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        amount,
+        currency,
+        receipt: receiptId
+      })
+    })
+
+    const order = await response.json();
+    console.log('order', order);
+
+
+    var option = {
+      key: import.meta.env.VITE_Key_Id,
+      amount,
+      currency,
+      name: "Web Codder",
+      description: "Test Transaction",
+      image: "https://i.ibb.co/5Y3m33n/test.png",
+      order_id: order.id,
+      handler: async function (response) {
+
+        const body = { ...response, }
+
+        const validateResponse = await fetch('http://localhost:8800/api/payments/verification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+
+        })
+
+        const jsonResponse = await validateResponse.json();
+
+        console.log('jsonResponse', jsonResponse);
+
+      },
+      prefill: {
+        name: "Web Coder",
+        email: "webcoder@example.com",
+        contact: "9000000000",
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      // theme: {
+      //   color: "#3399cc",
+      // },
+    }
+
+    var rzp1 = new Razorpay(option);
+    rzp1.on("payment.failed", function (response) {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    })
+
+    rzp1.open();
+    event.preventDefault();
+
+  }
+
 
   if (isSuccess) {
     return (
@@ -195,7 +271,7 @@ export default function CartPage() {
           </Box>
           {!!cart?.length && (
             <Box>
-              <h2>Order information</h2>
+              {/* <h2>Order information</h2>
               <Input type="text"
                 placeholder="Name"
                 value={billData?.name}
@@ -227,9 +303,9 @@ export default function CartPage() {
                 placeholder="Country"
                 value={billData?.country}
                 name="country"
-                onChange={handleChange} />
+                onChange={handleChange} /> */}
               <Button black block
-                onClick={goToPayment}>
+                onClick={checkouthandler}>
                 Continue to payment
               </Button>
             </Box>

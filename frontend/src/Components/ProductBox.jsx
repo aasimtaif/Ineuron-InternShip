@@ -74,9 +74,10 @@ function ProductBox({ product }) {
   const dispatch = useDispatch()
 
   const addProductToCart = () => {
-    console.log(product)
+  
     dispatch(incrementQuantity(product))
   }
+  // console.log(product)
   const url = '/product/' + product._id;
   return (
     <ProductWrapper>

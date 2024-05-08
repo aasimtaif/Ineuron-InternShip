@@ -11,7 +11,6 @@ import Cart from './Pages/Cart';
 import ProductDetais from './Pages/ProductDetais';
 
 
-
 function App() {
   const { auth: { user }, counter: { cart: cart } } = useSelector(state => state);
   useEffect(() => {
@@ -19,15 +18,12 @@ function App() {
   }, [cart]);
   const ProtectedRoutes = ({ children }) => {
     if (user) {
-      console.log(user)
       return children
     }
     else {
       return <Navigate to="/login" />
     }
   }
-  console.log(user)
-
   return (
     <React.Fragment>
       <Routes>

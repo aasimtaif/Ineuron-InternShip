@@ -33,7 +33,6 @@ function SearchList() {
     const [products, setProducts] = useState(null);
     const [search, setSearch] = useState();
     const navigate = useNavigate();
-    console.log(search)
     useEffect(() => {
         let debounceTimer;
         const delay = 800; // Adjust debounce delay as needed
@@ -50,7 +49,6 @@ function SearchList() {
 
         return () => clearTimeout(debounceTimer);
     }, [search]);
-    console.log(products)
     if (!products) return setProducts([]);
     return (
         <SearchDiv>

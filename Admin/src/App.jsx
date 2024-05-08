@@ -24,7 +24,6 @@ function App() {
   useEffect(() => {
     setShowNav(false)
   }, [pathname])
-  console.log(useLocation())
   const ProtectedRoutes = ({ children }) => {
     if (user.isAdmin) {
       return children
@@ -80,11 +79,11 @@ function App() {
                 <EditUser />
               </ProtectedRoutes>
             } exact></Route>
-            <Route path={'/settings'} element={
+            {/* <Route path={'/settings'} element={
               <ProtectedRoutes>
                 <Settigns />
               </ProtectedRoutes>
-            } exact></Route>
+            } exact></Route> */}
             <Route path={'/products/new'} element={
               <ProtectedRoutes>
                 <NewProducts />

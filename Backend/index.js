@@ -6,13 +6,15 @@ import cartRoute from "./route/Cart.js";
 import orderRoute from "./route/Order.js";
 import userRoute from "./route/user.js";
 import cors from "cors";
+import paymentRoute from "./route/Payment.js"
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 const app = express();
 
 dotenv.config()
+app.use(express.json())
 app.use(cors())
-app.use(express.json());
+
 
 const DataBaseConnection = async () => {
     try {
@@ -33,7 +35,7 @@ app.use("/api/products", productRoute);
 app.use("/api/categories", CategoryRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/orders", orderRoute);
-
+app.use("/api/payments", paymentRoute);
 
 app.get("/", (req, res) => {
     res.send("Welcome .");

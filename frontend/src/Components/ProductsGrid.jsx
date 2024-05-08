@@ -16,10 +16,10 @@ function ProductsGrid({ products }) {
   return (
     <StyledProductsGrid>
       {products?.length > 0 && products.map(product => (
-        <>
-          <ProductBox key={product._id} product={product} />
 
-        </>
+        <ProductBox key={product._id} product={product} />
+
+
       ))}
     </StyledProductsGrid>
   )

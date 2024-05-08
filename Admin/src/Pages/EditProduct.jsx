@@ -13,20 +13,25 @@ function EditProduct() {
                 const response = await Axios.get(`http://localhost:8800/api/products/${id}`)
                 setProduct(response.data)
                 setImages(response.data.images)
-                console.log(response)
             } catch (err) {
                 console.log(err)
             }
         }
         fetchData()
-
     }, []);
+    if (!product) {
+        return <>Wait</>
+    }
     return (
         <div>
             <h1>
                 Edit Product
             </h1>
-            <ProductForm method='put' url={`products/${id}`} product={product} images={images} />
+            {product._id && <ProductForm method='put' url={`products/${id}`} product={product} images={images} propertyName={Object.keys(product.properties)}
+                propertyValue={Object.keys(product.properties)?.map((name, index) => {
+                    return product.properties[name]
+                })}
+            />}
         </div>
     )
 }

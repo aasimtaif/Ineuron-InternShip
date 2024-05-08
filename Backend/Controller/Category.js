@@ -17,7 +17,7 @@ export const addCategory = async (req, res) => {
 
 export const getCategories = async (req, res) => {
     try {
-        const categories = await categoryModel.find().populate('parent');
+        const categories = await categoryModel.find()
         res.status(200).json(categories);
     } catch (error) {
         console.log(error)
@@ -50,5 +50,26 @@ export const updateCategory = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Error updating category', error });
+    }
+}
+export const getCategoryById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const category = await categoryModel.findById(id);
+        res.status(200).json(category);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Error getting category', error });
+    }
+}
+
+export const searchCategory = async (req, res) => {
+    const { name } = req.query;
+    try {
+        const categories = await categoryModel.find({ name: { $regex: name, $options: 'i' } });
+        res.status(200).json(categories);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Error getting categories', error });
     }
 }
