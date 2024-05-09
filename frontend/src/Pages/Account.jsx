@@ -6,6 +6,7 @@ import Input from '../Components/Input';
 import Button from '../Components/Button';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const Box = styled.div`
 width: 100%;
 display: flex;
@@ -59,6 +60,7 @@ display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 width: 100%;
+
 @media screen and (max-width:880px) {
     grid-template-columns: repeat(2, 1fr); /* Display 2 items per row on tablets */
 }
@@ -75,11 +77,12 @@ font-size: 1.5rem;
 font-weight: 500;
 color: #333;
 `
-const OrderDiv = styled.div`
+const OrderDiv = styled(Link)`
 display: flex;
 flex-direction: column;
 padding: 10px;
 gap: 5px;
+cursor: pointer;
 width: 100%;
 background-color: #222;
 color: #f5f0f0;
@@ -114,13 +117,6 @@ width: 100%;
   grid-template-columns: 1fr; /* Display 1 item per row on mobile */
 }
 `
-
-const initialUser = {
-  userName: '',
-  email: '',
-  address: '',
-  phone: ''
-}
 
 function Account() {
   const { user } = useSelector(state => state.auth)
@@ -187,7 +183,7 @@ function Account() {
           </Title>
           <OrderList>
             {orders.map(order => (
-              <OrderDiv key={order._id}>
+              <OrderDiv key={order._id} to={`/order/${order._id}`}>
                 <h3>Order ID: {order._id}</h3>
                 <p>Order Date: {new Date(order.createdAt).toDateString()}</p>
                 {order.products.map(product => (
@@ -201,7 +197,8 @@ function Account() {
               </OrderDiv>
             ))}
           </OrderList>
-        </OrdersContainer>}
+        </OrdersContainer>
+      }
       <ReviewContainer>
 
       </ReviewContainer>

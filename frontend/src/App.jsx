@@ -9,7 +9,7 @@ import Products from './Pages/Products';
 import Account from './Pages/Account';
 import Cart from './Pages/Cart';
 import ProductDetais from './Pages/ProductDetais';
-
+import OrderDetail from './Pages/OrderDetail';
 
 function App() {
   const { auth: { user }, counter: { cart: cart } } = useSelector(state => state);
@@ -57,13 +57,13 @@ function App() {
             </>
           }
         />
-        {/* <Route path='/category'
+        <Route path='/order/:id'
           element={
             <>
               <Header />
-              <Products />
+              <OrderDetail />
             </>
-          } /> */}
+          } />
         <Route path='/cart'
           element={
             <ProtectedRoutes>
@@ -81,7 +81,7 @@ function App() {
         <Route path='*' element={<div>
           <Header />
           404
-          </div>} />
+        </div>} />
       </Routes>
     </React.Fragment>
   )

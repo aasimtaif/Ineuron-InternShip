@@ -57,7 +57,6 @@ export const paymentVerification = async (req, res) => {
     try {
         const { orderId, ...details } = req.body;
         const response = await Cashfree.PGOrderFetchPayments("2023-08-01", orderId)
-        console.log(response.data[0].payment_status)
         if (response.data[0].payment_status === 'SUCCESS') {
             const order = await orderModel.create({ cashFreeOrderId: orderId, ...details, paid: true });
             res.status(201).json(order);

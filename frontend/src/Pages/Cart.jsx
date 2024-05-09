@@ -87,10 +87,9 @@ export default function CartPage() {
     userName: user.userName,
     email: user.email,
     phone: user.phone,
-    address: user.address
+    streetAddress: user.address
   })
   const [isSuccess, setIsSuccess] = useState(false);
-  const [alert, setAlert] = useState({ status: false, message: '' })
   const navigate = useNavigate();
 
 
@@ -158,7 +157,7 @@ export default function CartPage() {
         dispatch(resetCart())
         setTimeout(() => {
           navigate('/')
-        }, 3000)
+        }, 5000)
       }
 
     } catch (error) {
@@ -265,19 +264,16 @@ export default function CartPage() {
               <Input type="text"
                 placeholder="userName"
                 value={billData?.userName}
-                // defaultValue={user.userName}
                 name="name"
                 onChange={handleChange} />
               <Input type="text"
                 placeholder="Email"
                 value={billData?.email}
-                // defaultValue={user.email}
                 name="email"
                 onChange={handleChange} />
               <Input type="text"
                 placeholder="Phone number"
                 value={billData?.phone}
-                // defaultValue={user.phone}
                 name="phone"
                 onChange={handleChange} />
               <CityHolder>
@@ -299,9 +295,8 @@ export default function CartPage() {
               </CityHolder>
               <Input type="text"
                 placeholder="Street Address"
-                value={billData?.address}
-                // defaultValue={user.address}
-                name="address"
+                value={billData?.streetAddress}
+                name="streetAddress"
                 onChange={handleChange} />
               <Button black block
                 onClick={handleClick}>
