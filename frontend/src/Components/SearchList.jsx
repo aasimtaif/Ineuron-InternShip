@@ -55,7 +55,7 @@ function SearchList() {
             <input value={search} placeHolder="   Search product..." onChange={(e) => { setSearch(e.target.value) }} />
             {products && <div>
                 <ProductList>
-                    {products?.map((product) => {
+                    {search && products?.map((product) => {
                         return (
                             <div onClick={() => {
                                 navigate(`/product/${product._id}`)

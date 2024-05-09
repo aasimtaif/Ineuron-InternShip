@@ -9,7 +9,7 @@ import Input from "../Components/Input";
 import { load } from '@cashfreepayments/cashfree-js'
 import { Axios } from "../utils/api";
 import { useNavigate } from "react-router-dom";
-
+import toast, { Toaster } from 'react-hot-toast';
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -76,6 +76,8 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
+const notify = (message) => toast.error(message);
+
 export default function CartPage() {
   const { auth: { user }, counter: { cart: cart } } = useSelector(state => state)
   const dispatch = useDispatch();
@@ -88,6 +90,7 @@ export default function CartPage() {
     address: user.address
   })
   const [isSuccess, setIsSuccess] = useState(false);
+  const [alert, setAlert] = useState({ status: false, message: '' })
   const navigate = useNavigate();
 
 
@@ -134,7 +137,8 @@ export default function CartPage() {
         return { sessionId: res.data.payment_session_id, orderId: res.data.order_id }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error.response)
+      notify(error.response.data.message)
     }
   }
   const verifyPayment = async (orderId) => {
@@ -158,7 +162,7 @@ export default function CartPage() {
       }
 
     } catch (error) {
-      console.log(error)
+      console.log(error.response.data)
     }
   }
   const handleClick = async (e) => {
@@ -180,6 +184,7 @@ export default function CartPage() {
 
     } catch (error) {
       console.log(error)
+      notify(error.response.data.message)
     }
 
   }
@@ -200,6 +205,10 @@ export default function CartPage() {
   }
   return (
     <>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
       <Center>
         <ColumnsWrapper>
           <Box>
@@ -250,7 +259,7 @@ export default function CartPage() {
               </Table>
             )}
           </Box>
-          {!!cart?.length && (
+          {!!cart?.length && user._id && (
             <Box>
               <h2>Order information</h2>
               <Input type="text"

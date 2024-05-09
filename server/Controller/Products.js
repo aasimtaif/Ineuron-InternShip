@@ -76,8 +76,8 @@ export const searchProducts = async (req, res) => {
     try {
         const products = await productModel.find({
             $or: [
-                { name: { $regex: q, $options: 'i' } },
-                { description: { $regex: q, $options: 'i' } }
+                { name: { $regex: '^' + q, $options: 'i' } },
+                { description: { $regex: '^' + q, $options: 'i' } }
             ]
         }).populate({
             path: 'review',
