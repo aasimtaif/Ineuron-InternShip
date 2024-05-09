@@ -56,7 +56,14 @@ function App() {
               <ProductDetais />
             </>
           }
-        />\
+        />
+        {/* <Route path='/category'
+          element={
+            <>
+              <Header />
+              <Products />
+            </>
+          } /> */}
         <Route path='/cart'
           element={
             <ProtectedRoutes>
@@ -71,7 +78,10 @@ function App() {
               <Account user={user} />
             </ProtectedRoutes>
           } />
-        <Route path='*' element={<div>404</div>} />
+        <Route path='*' element={<div>
+          <Header />
+          404
+          </div>} />
       </Routes>
     </React.Fragment>
   )

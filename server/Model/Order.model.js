@@ -13,6 +13,7 @@ const orderSchema = new mongoose.Schema({
     postalCode: String,
     streetAddress: String,
     country: String,
+    cashFreeOrderId: String,
     paid: { type: Boolean, default: false },
     totalPrice: Number,
     products: [productSchema]

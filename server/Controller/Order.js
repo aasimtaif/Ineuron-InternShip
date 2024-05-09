@@ -2,8 +2,6 @@
 import { orderModel } from "../Model/Order.model.js";
 
 export const createOrder = async (req, res) => {
-    const authHeader = req.headers['authorization']
-    console.log(authHeader)
     try {
         const order = await orderModel.create(req.body);
         res.status(201).json(order);

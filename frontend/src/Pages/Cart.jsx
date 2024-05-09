@@ -1,4 +1,3 @@
-import Header from "../Components/Header";
 import styled from "styled-components";
 import Center from "../Components/Center";
 import Button from "../Components/Button";
@@ -7,15 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity, resetCart } from '../store/store'
 import Table from "../Components/Table";
 import Input from "../Components/Input";
+import { load } from '@cashfreepayments/cashfree-js'
 import { Axios } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
+
 const ColumnsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  @media screen and (min-width: 768px) {
-    grid-template-columns: 1.2fr .8fr;
-  }
+    grid-template-columns: 1fr;
   gap: 40px;
   margin-top: 40px;
 `;
@@ -79,16 +77,34 @@ const CityHolder = styled.div`
 `;
 
 export default function CartPage() {
-  const { auth, counter: { cart: cart } } = useSelector(state => state)
+  const { auth: { user }, counter: { cart: cart } } = useSelector(state => state)
   const dispatch = useDispatch();
   const [products, setProducts] = useState(cart);
-  const [billData, setBillData] = useState({})
+  const [billData, setBillData] = useState({
+    userId: user._id,
+    userName: user.userName,
+    email: user.email,
+    phone: user.phone,
+    address: user.address
+  })
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
+
+
+  let cashfree;
+
+  let insitialzeSDK = async function () {
+
+    cashfree = await load({
+      mode: "sandbox",
+    })
+  }
+
+  insitialzeSDK()
+
   useEffect(() => {
     setProducts(cart)
   }, [cart])
-  console.log(cart)
   const handleChange = (e) => {
     setBillData({ ...billData, [e.target.name]: e.target.value })
   }
@@ -98,110 +114,75 @@ export default function CartPage() {
   function lessOfThisProduct(id) {
     dispatch(decrementQuantity(id));
   }
-  const goToPayment = async () => {
-    try {
-      const response = Axios.post(`orders`, {
-        ...billData,
-        products: products.map(product => ({ product: product._id, quantity: product.quantity })),
-        userId: auth.user._id,
-        totalPrice: total
-      })
-      setIsSuccess(true)
-      console.log(response)
-      if (response) {
-        dispatch(resetCart())
-        setTimeout(() => {
-          navigate('/')
-        }, 10000)
-      };
-    } catch (error) {
-      console.log(error)
-    }
-
-
-  }
   let total = 0;
   for (const productId of cart) {
     const price = productId.price * productId.quantity;
     total += price;
   }
-  const checkouthandler = async (event) => {
-    const amount = 500;
-    const currency = 'INR';
-    const receiptId = '1234567890';
 
-    const response = await fetch('http://localhost:8800/api/payments/checkout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        amount,
-        currency,
-        receipt: receiptId
+  const getSessionId = async () => {
+    try {
+      let res = await Axios.post("payments/checkout", {
+        email: billData.email,
+        name: billData.userName,
+        phone: billData.phone,
+        userId: billData.userId,
+        total: total
       })
-    })
 
-    const order = await response.json();
-    console.log('order', order);
+      if (res.data && res.data.payment_session_id) {
+        return { sessionId: res.data.payment_session_id, orderId: res.data.order_id }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const verifyPayment = async (orderId) => {
+    console.log(orderId)
+    try {
+
+      let res = await Axios.post("payments/verification", {
+        ...billData,
+        products: products.map(product => ({ product: product._id, quantity: product.quantity })),
+        totalPrice: total,
+        orderId: orderId,
+      })
+
+      if (res && res.data) {
+        setIsSuccess(true)
+        setBillData()
+        dispatch(resetCart())
+        setTimeout(() => {
+          navigate('/')
+        }, 3000)
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleClick = async (e) => {
+    e.preventDefault()
+    try {
+
+      let { sessionId, orderId } = await getSessionId()
+      console.log(sessionId)
+      let checkoutOptions = {
+        paymentSessionId: sessionId,
+        redirectTarget: "_modal",
+      }
+
+      cashfree.checkout(checkoutOptions).then((res) => {
+        console.log("payment initialized", orderId)
+        verifyPayment(orderId)
+      })
 
 
-    var option = {
-      key: import.meta.env.VITE_Key_Id,
-      amount,
-      currency,
-      name: "Web Codder",
-      description: "Test Transaction",
-      image: "https://i.ibb.co/5Y3m33n/test.png",
-      order_id: order.id,
-      handler: async function (response) {
-
-        const body = { ...response, }
-
-        const validateResponse = await fetch('http://localhost:8800/api/payments/verification', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-
-        })
-
-        const jsonResponse = await validateResponse.json();
-
-        console.log('jsonResponse', jsonResponse);
-
-      },
-      prefill: {
-        name: "Web Coder",
-        email: "webcoder@example.com",
-        contact: "9000000000",
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      // theme: {
-      //   color: "#3399cc",
-      // },
+    } catch (error) {
+      console.log(error)
     }
 
-    var rzp1 = new Razorpay(option);
-    rzp1.on("payment.failed", function (response) {
-      alert(response.error.code);
-      alert(response.error.description);
-      alert(response.error.source);
-      alert(response.error.step);
-      alert(response.error.reason);
-      alert(response.error.metadata.order_id);
-      alert(response.error.metadata.payment_id);
-    })
-
-    rzp1.open();
-    event.preventDefault();
-
   }
-
-
   if (isSuccess) {
     return (
       <>
@@ -271,18 +252,31 @@ export default function CartPage() {
           </Box>
           {!!cart?.length && (
             <Box>
-              {/* <h2>Order information</h2>
+              <h2>Order information</h2>
               <Input type="text"
-                placeholder="Name"
-                value={billData?.name}
+                placeholder="userName"
+                value={billData?.userName}
+                // defaultValue={user.userName}
                 name="name"
                 onChange={handleChange} />
               <Input type="text"
                 placeholder="Email"
                 value={billData?.email}
+                // defaultValue={user.email}
                 name="email"
                 onChange={handleChange} />
+              <Input type="text"
+                placeholder="Phone number"
+                value={billData?.phone}
+                // defaultValue={user.phone}
+                name="phone"
+                onChange={handleChange} />
               <CityHolder>
+                <Input type="text"
+                  placeholder="Country"
+                  value={billData?.country}
+                  name="country"
+                  onChange={handleChange} />
                 <Input type="text"
                   placeholder="City"
                   value={billData?.city}
@@ -296,16 +290,12 @@ export default function CartPage() {
               </CityHolder>
               <Input type="text"
                 placeholder="Street Address"
-                value={billData?.streetAddress}
-                name="streetAddress"
+                value={billData?.address}
+                // defaultValue={user.address}
+                name="address"
                 onChange={handleChange} />
-              <Input type="text"
-                placeholder="Country"
-                value={billData?.country}
-                name="country"
-                onChange={handleChange} /> */}
               <Button black block
-                onClick={checkouthandler}>
+                onClick={handleClick}>
                 Continue to payment
               </Button>
             </Box>
