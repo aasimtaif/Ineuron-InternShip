@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux'
 import Users from './Pages/Users'
 import NewUser from './Pages/NewUser'
 import EditUser from './Pages/EditUser'
+import OrderDetails from './Pages/OrderDetails'
 function App() {
   const [showNav, setShowNav] = useState(false);
   const pathname = useLocation();
@@ -79,11 +80,11 @@ function App() {
                 <EditUser />
               </ProtectedRoutes>
             } exact></Route>
-            {/* <Route path={'/settings'} element={
+            <Route path={'/orders/:id'} element={
               <ProtectedRoutes>
-                <Settigns />
+                <OrderDetails />
               </ProtectedRoutes>
-            } exact></Route> */}
+            } exact></Route>
             <Route path={'/products/new'} element={
               <ProtectedRoutes>
                 <NewProducts />
