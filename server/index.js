@@ -15,7 +15,12 @@ const app = express();
 
 dotenv.config()
 app.use(express.json())
-app.use(cors())
+const corsOption = {
+    origin: ['http://localhost:5174', 'http://localhost:5173'],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+}
+app.use(cors(corsOption))
 
 
 const DataBaseConnection = async () => {

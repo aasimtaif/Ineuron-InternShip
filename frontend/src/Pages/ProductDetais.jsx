@@ -130,7 +130,7 @@ function ProductDetais() {
     const getProductData = async () => {
         setIsLoading(true);
         try {
-            const response = await Axios.get(`http://localhost:8800/api/products/${id}`);
+            const response = await Axios.get(`products/${id}`);
             setProduct(response.data)
         } catch (e) {
             console.log(e)

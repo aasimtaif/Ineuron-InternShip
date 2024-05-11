@@ -7,7 +7,7 @@ function Orders() {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    Axios.get('http://localhost:8800/api/orders')
+    Axios.get('orders')
       .then((response) => {
         setOrders(response.data)
       })

@@ -10,7 +10,7 @@ function EditProduct() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await Axios.get(`http://localhost:8800/api/products/${id}`)
+                const response = await Axios.get(`products/${id}`)
                 setProduct(response.data)
                 setImages(response.data.images)
             } catch (err) {

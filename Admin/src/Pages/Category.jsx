@@ -12,7 +12,7 @@ function Categories({ swal }) {
     fetchCategories();
   }, [])
   function fetchCategories() {
-    Axios.get('http://localhost:8800/api/categories').then(result => {
+    Axios.get('categories').then(result => {
       setCategories(result.data);
     });
   }
@@ -27,10 +27,10 @@ function Categories({ swal }) {
     };
     if (editedCategory) {
       data._id = editedCategory._id;
-      await Axios.put(`http://localhost:8800/api/categories/${data._id}`, data);
+      await Axios.put(`categories/${data._id}`, data);
       setEditedCategory(null);
     } else {
-      await Axios.post(`http://localhost:8800/api/categories`, data);
+      await Axios.post(`categories`, data);
     }
     setName('');
     setParentCategory('');
