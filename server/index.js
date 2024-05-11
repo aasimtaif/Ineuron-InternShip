@@ -11,9 +11,17 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 const app = express();
 
+const corseConfig = {
+    origin: '',
+    credentials: true,
+    methods: 'GET, POST, PUT, DELETE, OPTIONS',
+}
+
+
 dotenv.config()
 app.use(express.json())
-app.use(cors())
+app.options('', cors(corseConfig))
+app.use(cors(corseConfig))
 
 
 const DataBaseConnection = async () => {
