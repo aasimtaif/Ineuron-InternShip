@@ -7,5 +7,4 @@ export const Axios = axios.create({
     headers: {
         'authorization': `Bearer ${token}`,
     },
-    withCredentials: true
 });
