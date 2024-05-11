@@ -44,4 +44,4 @@ app.listen(8800, () => {
     DataBaseConnection()
     console.log("Connected to backend.on 8800");
 });
-app.setTimeout(500000);
+app.setTimeout(50000);
