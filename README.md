@@ -1,4 +1,4 @@
-MERN Stack E-Commerce Website and Admin Dashboard
+## MERN Stack E-Commerce Website and Admin Dashboard
 
 Project Overview:
 The primary components of the project include:
@@ -31,4 +31,4 @@ Backend: Node.js and Express.js are used to create a robust and efficient backen
 Database: MongoDB serves as the database of choice, delivering a flexible and scalable solution for storing and managing E-commerce data.
 
 
-All the workflow and details E-Commerce Website ,AdminDashboard and server are present in their respective folders 
+## All the workflow and details E-Commerce Website ,AdminDashboard and server are present in their respective folders 
