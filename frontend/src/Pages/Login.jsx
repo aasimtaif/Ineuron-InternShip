@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/authStore';
-import axios from 'axios';
 import { Axios } from '../utils/api';
 export default function Login() {
     const [inputs, setInputs] = useState({})
