@@ -99,6 +99,7 @@ function Header() {
             :
             <NavLink to="/login" >Login</NavLink>
           }
+          {user?.isAdmin && <NavLink to="https://ineuron-intern-ship.vercel.app" target="_blank" >DashBoard</NavLink>}
           {user?._id && <Button outline white size='s' onClick={handleLogOut} >Logout</Button>}
 
         </StyledNav>

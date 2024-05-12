@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux'
 import { setUser } from '../store/authStore';
 import toast, { Toaster } from 'react-hot-toast';
 import { Axios } from '../utils/api';
@@ -10,6 +11,7 @@ export default function Login() {
     const [inputs, setInputs] = useState({})
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
     const setInputChange = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value })
     }

@@ -32,6 +32,14 @@ function App() {
       return <Navigate to="/login" />
     }
   }
+  const UnProtectedRoutes = ({ children }) => {
+    if (!user.isAdmin) {
+      return children
+    }
+    else {
+      return <Navigate to="/" />
+    }
+  }
 
   return (
     <div className="bg-bgGray min-h-screen ">
@@ -99,7 +107,11 @@ function App() {
                 <Category />
               </ProtectedRoutes>
             } exact></Route>
-            <Route path={'/login'} element={<Login />} exact></Route>
+            <Route path={'/login'} element={
+              <UnProtectedRoutes>
+                <Login />
+              </UnProtectedRoutes>
+            } exact></Route>
           </Routes>
         </div>
       </div>
