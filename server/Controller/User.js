@@ -6,17 +6,22 @@ import bcrypt from "bcryptjs";
 
 
 export const register = async (req, res) => {
-    const { password, ...details } = req.body;
-    console.log(password, details)
-    const salt = bcrypt.genSaltSync(10);
-    const hashpassword = bcrypt.hashSync(password, salt);
+    const { password, email, ...details } = req.body;
     try {
-        const user = await usersModel.create({
+        const user = await usersModel.findOne({ email })
+        if (user) {
+            res.status(400).json({ error: 'User already exists' });
+            return;
+        }
+        const salt = bcrypt.genSaltSync(10);
+        const hashpassword = bcrypt.hashSync(password, salt);
+        const newUser = await usersModel.create({
             ...details,
+            email,
             password: hashpassword
         });
-        console.log(user)
-        res.json(user);
+        // console.log(user)
+        res.json(newUser);
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Error creating user', error });
@@ -47,7 +52,7 @@ export const login = async (req, res) => {
                 console.log(password, isAdmin, details)
                 res
                     .status(200)
-                    .json({ details: { ...details,isAdmin },  token });
+                    .json({ details: { ...details, isAdmin }, token });
             }
         }
     } catch (error) {
