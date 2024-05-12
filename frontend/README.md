@@ -39,4 +39,4 @@ Open your web browser and go to http://localhost:3000 to access the application 
 
 ## The Basic Work Flow of This website
 
-![Flow Chart](./src/assets/workFlow.jpg)
+![Flow Chart](./src/assets/workFlow.png)
