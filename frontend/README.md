@@ -7,32 +7,25 @@ This React Vite-based e-commerce platform allows users to browse the latest prod
 ## Project Pages
 
 - Home Page
-
-Displays the latest projects and features a specific product.
+    Displays the latest projects and features a specific product.
 
 - All Products Page
-
-Provides a comprehensive list of all available products.
+    Provides a comprehensive list of all available products.
 
 - Accounts Page
-
-Enables users to manage their accounts, including profile information and preferences.and placed-orders list
+    Enables users to manage their accounts, including profile information and preferences.and placed-orders list
 
 - Order details Page
-
-Display order the respective order details
+    Display order the respective order details
 
 - Login Page
-
-Allows users to securely log into their accounts.
+    Allows users to securely log into their accounts.
 
 - Register Page
-
-Facilitates new user registration and account creation.
+    Facilitates new user registration and account creation.
 
 - Cart Page
-
-Allows users to place orders and make payments securely through the Cashfree payment gateway.
+    Allows users to place orders and make payments securely through the Cashfree payment gateway.
 Technology Stack
 
 ## The project is built using the following technologies:
