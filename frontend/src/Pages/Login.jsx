@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/authStore';
 import { Axios } from '../utils/api';
+import toast, { Toaster } from 'react-hot-toast';
+
+const notify = (message) => toast.error(message);
 export default function Login() {
     const [inputs, setInputs] = useState({})
     const navigate = useNavigate()
@@ -23,22 +26,18 @@ export default function Login() {
                 navigate('/')
             }
         } catch (error) {
-            console.error(error)
+            notify(error.response.data.error)
+            console.error(error.response.data.error)
         }
     }
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-300">
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
             <div className="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
-                <div className="font-medium self-center text-xl sm:text-2xl uppercase text-gray-800">Login To Your Account</div>
-                <button className="relative mt-6 border rounded-md py-2 text-sm text-gray-800 bg-gray-100 hover:bg-gray-200">
-                    <span className="absolute left-0 top-0 flex items-center justify-center h-full w-10 text-red-500"><i className="fab fa-facebook-f"></i></span>
-                    <span className="text-red-">Login with Facebook</span>
-                </button>
-                <div className="relative mt-10 h-px bg-gray-300">
-                    <div className="absolute left-0 top-0 flex justify-center w-full -mt-2">
-                        <span className="bg-white px-4 text-xs text-gray-500 uppercase">Or Login With Email</span>
-                    </div>
-                </div>
+                <p className="bg-white font-bold text-gray-400 uppercase text-center text-md "> Login With Email</p>
                 <div className="mt-10">
                     <form onSubmit={handleSubmit} >
                         <div className="flex flex-col mb-6">

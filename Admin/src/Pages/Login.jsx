@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/authStore';
-import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 import { Axios } from '../utils/api';
+
+const notify = (message) => toast.error(message);
 export default function Login() {
     const [inputs, setInputs] = useState({})
     const navigate = useNavigate()
@@ -25,11 +26,16 @@ export default function Login() {
             }
             console.log(res)
         } catch (error) {
-            console.error(error)
+            notify(error.response.data.error)
+            console.error(error.response.data.error)
         }
     }
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-300">
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
             <div className="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
                 <p className="bg-white font-bold text-gray-400 uppercase text-center text-md "> Login With Email</p>
 

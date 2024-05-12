@@ -37,7 +37,7 @@ export const login = async (req, res) => {
             email
         });
         if (!user) {
-            res.status(400).json({ error: 'User not found' });
+            res.status(400).json({ error: 'User not found or Wrong Email' });
         } else {
             const validPassword = bcrypt.compareSync(password, user.password);
             if (!validPassword) {
