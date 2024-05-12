@@ -27,7 +27,7 @@ export const checkOut = async (req, res) => {
         let request = {
             "order_amount": total,
             "order_currency": "INR",
-            "order_id": await generateOrderId(),
+            "order_id": generateOrderId(),
             "customer_details": {
                 "customer_id": userId,
                 "customer_phone": phone,
@@ -36,17 +36,12 @@ export const checkOut = async (req, res) => {
             },
         }
 
-        Cashfree.PGCreateOrder("2023-08-01", request).then(response => {
-            res.json(response.data);
-
-        }).catch(error => {
-            console.error(error,"line 43");
-            res.status(400).json(error.response.data);
-        })
-
+        const response = await Cashfree.PGCreateOrder("2023-08-01", request)
+        res.status(201).json(response?.data);
+        console.log(response?.data, "line 48")
 
     } catch (error) {
-        console.log(error,"line 49");
+        console.log(error, "line 49");
         res.status(400).json(error);
     }
 
