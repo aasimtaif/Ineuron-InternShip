@@ -1,17 +1,17 @@
-## Online E-commerce Platform
+# Online E-commerce Platform
 
 Overview
 This project is a React Vite-based online e-commerce platform for showcasing the latest projects, featuring specific products, managing user accounts, and facilitating seamless transactions through a secure payment gateway. The project utilizes various technologies including React, React-Redux, Redux Toolkit, Tailwind CSS, Styled-Components, Axios for API calls, React Router DOM for routing, and the Cashfree payment gateway for secure payment processing.
 
-# Installation Process #
+## Installation Process 
 
 To run this project on your local device, follow the steps below:
 
-***Prerequisites***
+## Prerequisites
 
 Node.js and npm should be installed on your local device.
 
-***Steps***
+## Steps
 
 **Clone the Repository**
 
