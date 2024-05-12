@@ -154,9 +154,10 @@ export default function CartPage() {
       if (res && res.data) {
         setIsSuccess(true)
         setBillData()
-        dispatch(resetCart())
         setTimeout(() => {
+          dispatch(resetCart())
           navigate('/')
+
         }, 5000)
       }
 
@@ -212,7 +213,7 @@ export default function CartPage() {
         <ColumnsWrapper>
           <Box>
             <h2>Cart</h2>
-            {!cart?.length && (
+            {!cart?.length && !isSuccess && (
               <div>Your cart is empty</div>
             )}
             {products?.length > 0 && (
