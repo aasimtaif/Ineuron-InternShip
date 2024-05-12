@@ -70,7 +70,7 @@ Start the Development Server
 
 Access the Application
 
-Open your web browser and go to http://localhost:3000 to access the application running on your local device.
+Open your web browser and go to http://localhost:5173 to access the application running on your local device.
 
 ## The Basic Work Flow of This website
 
