@@ -10,7 +10,6 @@ import EditProduct from './Pages/EditProduct'
 import Category from './Pages/Category'
 import Logo from './components /Logo'
 import { useLocation } from 'react-router-dom'
-import Register from './Pages/Register'
 import Login from './Pages/Login'
 import { useSelector } from 'react-redux'
 import Users from './Pages/Users'
@@ -101,7 +100,6 @@ function App() {
               </ProtectedRoutes>
             } exact></Route>
             <Route path={'/login'} element={<Login />} exact></Route>
-            <Route path={'/register'} element={<Register />} exact></Route>
           </Routes>
         </div>
       </div>
