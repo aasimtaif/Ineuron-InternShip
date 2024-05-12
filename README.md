@@ -2,6 +2,18 @@
 
 Project Overview:
 The primary components of the project include:
+Cloning the Repository
+To clone the repository and run the website locally, follow these steps:
+
+Open your terminal.
+
+Navigate to the directory where you want to clone the repository.
+
+Use the following command to clone the repository:
+
+bash
+
+```git clone https://github.com/aasimtaif/Ineuron-InternShip.git```
 
 MERN Stack E-Commerce Website:
 
@@ -31,4 +43,5 @@ Backend: Node.js and Express.js are used to create a robust and efficient backen
 Database: MongoDB serves as the database of choice, delivering a flexible and scalable solution for storing and managing E-commerce data.
 
 
-## All the workflow and details E-Commerce Website ,AdminDashboard and server are present in their respective folders 
+## All the workflow other details of E-Commerce Website ,AdminDashboard and server are present in their respective folders
+```
