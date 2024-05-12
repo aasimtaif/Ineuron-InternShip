@@ -20,10 +20,11 @@ function Users() {
     const deleteProduct = async (id) => {
         try {
             await Axios.delete(`users/${id}`)
-            getData()
+            setUsers(users.filter(user => user._id !== id))
         } catch (error) {
             console.error(error)
         }
+        getData()
     }
     return (
         <div >
