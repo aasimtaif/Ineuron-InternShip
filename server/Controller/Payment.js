@@ -40,13 +40,13 @@ export const checkOut = async (req, res) => {
             res.json(response.data);
 
         }).catch(error => {
-            console.error(error.response.data.message);
+            console.error(error,"line 43");
             res.status(400).json(error.response.data);
         })
 
 
     } catch (error) {
-        console.log(error);
+        console.log(error,"line 49");
         res.status(400).json(error);
     }
 
