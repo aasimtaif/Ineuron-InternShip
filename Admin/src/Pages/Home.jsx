@@ -25,7 +25,6 @@ function Home() {
     getOrders()
     getUser()
   }, [])
-  console.log(users, products, orders, sale)
   return (
     <div>
       <div className="text-blue-900 flex justify-between">
