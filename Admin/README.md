@@ -50,7 +50,8 @@ The E-commerce Website Admin Dashboard is built using the following technologies
 - Redux Toolkit: Manages the application state, including user data and permissions.
 - Axios: Handles API calls to interact with the server-side for managing data effectively.
 - Installation Process
-- To run the E-commerce Website Admin Dashboard on your local device, follow the steps below:
+
+** To run the E-commerce Website Admin Dashboard on your local device, follow the steps below:**
 
 ## Prerequisites
 
