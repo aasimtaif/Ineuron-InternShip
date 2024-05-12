@@ -11,8 +11,6 @@ Navigate to the directory where you want to clone the repository.
 
 Use the following command to clone the repository:
 
-bash
-
 ```git clone https://github.com/aasimtaif/Ineuron-InternShip.git```
 
 MERN Stack E-Commerce Website:
