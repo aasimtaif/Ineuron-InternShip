@@ -50,11 +50,11 @@ Node.js and npm should be installed on your local device.
 
 **Clone the Repository**
 
-`git clone https://github.com/your-username/your-repository.git`
+`git clone https://github.com/aasimtaif/Ineuron-InternShip.git`
 
 **Navigate to the Project Directory**
 
-`cd your-repository`
+`cd frontend`
 
 **Install Dependencies**
 
