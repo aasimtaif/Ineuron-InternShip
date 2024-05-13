@@ -47,46 +47,77 @@ Integrate Cashfree for payment generation and verification.
 **User Authentication:**
 
 POST `/api/auth/register` - Register a new user
+
 POST `/api/auth/login` - User login and token generation
 
 **User Management:**
+
 GET `/api/users`- Get all users (admin-protected route)
+
 GET `/api/users/:id` - Get a specific user (admin-protected route)
+
 PUT `/api/users/:id` - Update user information (user-protected route)
+
 DELETE `/api/users/:id` - Delete a user account (admin-protected route)
 
+
 **Product Management:**
+
 GET `/api/products`- Get all products
+
 GET `/api/products/:id` - Get a specific product
+
 GET `/api/products/new-products` - Get new products
+
 GET `/api/products/featured` - Get featured product
+
 GET `/api/products/search` - Get searched Products
+
 POST `/api/products/` -Post new Product(admin-protected route)
+
 PUT `/api/products/:id` - Update product information (admin-protected route)
+
 PUT `/api/products/reviews/:id` - add review of product (user-protected route)
+
 DELETE `/api/products/:id` - Delete a product (admin-protected route)
+
 DELETE `/api/products/image/:id` - Delete a specific photo of a product (admin-protected route)
 
+
 **Category Management:**
+
 GET `/api/categories/`- Get all categories (admin-protected route)
+
 GET `/api/categories/find/:id` - Get a specific category (admin-protected route)
+
 GET `/api/categories/search` - Get searched categories (admin-protected route)
+
 POST `/api/categories/` - Post new category (admin-protected route)
+
 PUT `/api/categories/:id` - Update category (admin-protected route)
+
 DELETE `/api/categories/:id` - Delete a category (admin-protected route)
 
+
 **Order Management:**
+
 GET `/api/orders/`- Get all orders (admin-protected route)
+
 GET `/api/orders/:id` - Get all orders of a specific user (user-protected route)
+
 GET `/api/orders/order/:id` - Get a order (user-protected route)
 
 **Payment Processing:**
 
-POST `/api/payment/checkout` - Generate a payment link
-POST `/api/payment/verify` - Verify the payment status
+POST `/api/payment/checkout` - Generate a payment link (user-protected route)
 
-Middleware
+POST `/api/payment/verify` - Verify the payment status  (user-protected route)
+
+
+**Middleware**
+
 Auth Middleware - Verifies the user's access token in the request header and matches it with the user's ID or admin for user-protected routes.
+
 Admin Middleware - Restricts access to admin-specific API endpoints.
 
 That's a brief introduction to the Node.js server with Express, MongoDB, and additional features. Further details about the routes, middleware, and server setup can be found in the codebase.
