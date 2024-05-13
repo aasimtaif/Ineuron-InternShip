@@ -5,7 +5,6 @@ const productSchema = new mongoose.Schema({
     product: { type: mongoose.Types.ObjectId, ref: 'productModel' }
 });
 const orderSchema = new mongoose.Schema({
-    razerpayId: String,
     userId: { type: mongoose.Types.ObjectId, ref: 'usersModel' },
     name: String,
     email: String,

@@ -6,7 +6,6 @@ const usersSchema = new mongoose.Schema({
     phone: { type: String },
     isAdmin: { type: Boolean, required: true, default: false },
     address: { type: String },
-    cartItems: { type: mongoose.Types.ObjectId, ref: 'cartModel' },
 }, {
     timestamps: true,
 });
