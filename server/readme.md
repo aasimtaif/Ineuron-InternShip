@@ -126,4 +126,4 @@ For additional details about the implemented API endpoints, middleware, or serve
 
 ## ER Diagram Of The DataBase
 
-![Flow Chart](./public/ERDiagram.png)
+![Flow Chart](./public/ERdiagram.png)
