@@ -8,7 +8,10 @@ import { Axios } from '../utils/api';
 
 const notify = (message) => toast.error(message);
 export default function Login() {
-    const [inputs, setInputs] = useState({})
+    const [inputs, setInputs] = useState({
+        email: "admin@gmail.com",
+        password: "123456"
+    })
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -82,6 +85,7 @@ export default function Login() {
                         </div>
                     </form>
                 </div>
+                <p className='text-xs font-light text-red-700 pt-2'>* Email and password is provided to Grant admin access to examine the website Plz dont delete or modify the whole data </p>
             </div>
         </div>
     );
