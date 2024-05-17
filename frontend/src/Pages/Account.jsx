@@ -4,7 +4,8 @@ import { Axios } from '../utils/api'
 import { useParams } from 'react-router-dom';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUser } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 const Box = styled.div`
@@ -123,6 +124,7 @@ function Account() {
   const [input, setInput] = useState(user)
   const [orders, setOrders] = useState([]);
   const { id } = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
     fetchOrders()
@@ -141,6 +143,16 @@ function Account() {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
 
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await Axios.put(`users/${id}`, input)
+      setInput(response.data)
+      dispatch(updateUser(response.data))
+    } catch (error) {
+      console.error(error)
+    }
   }
   const handleDismiss = () => {
     setInput(user);
@@ -170,7 +182,7 @@ function Account() {
         </Label>
         {Object.keys(user).some(key => user[key] !== input[key]) && (
           <ButtonDiv>
-            <Button black block type="submit">Save</Button>
+            <Button black blockon onClick={handleSubmit} type="submit">Save</Button>
             <Button red={true} block type="button" onClick={handleDismiss}>dismiss</Button>
           </ButtonDiv>
 

@@ -90,6 +90,7 @@ export const getUser = async (req, res) => {
 }
 export const UpdateUser = async (req, res) => {
     try {
+        // console.log(req.body, req.params.id)
         const user = await usersModel.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false });
         res.json(user);
     } catch (error) {
