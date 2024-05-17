@@ -92,7 +92,7 @@ function Header() {
         <StyledNav mobileNavActive={mobileNavActive}>
           <NavLink to="/" >Home</NavLink>
           <NavLink to="/products" >Products</NavLink>
-          <NavLink to="/category" >Category</NavLink>
+          {/* <NavLink to="/category" >Category</NavLink> */}
           <NavLink to="/cart" >Cart({cart?.length})</NavLink>
           {user?._id ?
             <NavLink to={`/account/${user._id}`}>Account</NavLink>
