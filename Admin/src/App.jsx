@@ -50,7 +50,20 @@ function App() {
       return <Navigate to="/" />
     }
   }
+  if (isLoading) {
+    return (<div className="flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-20">
+      <CountdownCircleTimer
+        isPlaying
+        duration={65}
+        colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+        colorsTime={[7, 5, 2, 0]}
+      >
+        {({ remainingTime }) => remainingTime}
 
+      </CountdownCircleTimer>
+      <h4>Due to free service the server goes to sleep mode after 15 min .Please wait for 65 seconds the server will restart </h4>
+    </div>)
+  }
   return (
     <div className="bg-bgGray min-h-screen ">
       <div className="block md:hidden flex items-center p-4">
@@ -65,18 +78,7 @@ function App() {
       </div>
       <div className="flex">
         <Nav showNav={showNav} setShowNav={setShowNav} />
-        {isLoading && <div className="flex flex-col m-auto p-4 justify-center align-center">
-          <CountdownCircleTimer
-            isPlaying
-            duration={55}
-            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-            colorsTime={[7, 5, 2, 0]}
-          >
-            {({ remainingTime }) => remainingTime}
 
-          </CountdownCircleTimer>
-          <h4>Due to free service the server goes to sleep mode after 15 min .Please wait for 55 seconds the server will restart </h4>
-        </div>}
         {!isLoading && <div className='flex-grow p-4'>
           <Routes>
             <Route path={'/'} element={
