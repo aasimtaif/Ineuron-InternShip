@@ -46,11 +46,6 @@ app.use("/api/cart", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/payments", paymentRoute);
 
-setInterval(() => {
-    fetch('https://ineuron-internship.onrender.com') // Replace with your actual Render app URL where your Express server is hosted
-      .then(() => console.log('Ping successful'))
-      .catch((err) => console.error('Ping failed:', err));
-  }, 13 * 60 * 1000); 
 app.get("/", (req, res) => {
     res.send("Welcome .");
 })
