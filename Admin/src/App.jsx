@@ -4,7 +4,6 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 import Home from './Pages/Home'
 import Products from './Pages/Products'
 import Orders from './Pages/Orders'
-import Settigns from './Pages/Settings'
 import NewProducts from './Pages/NewProducts'
 import EditProduct from './Pages/EditProduct'
 import Category from './Pages/Category'
@@ -16,14 +15,25 @@ import Users from './Pages/Users'
 import NewUser from './Pages/NewUser'
 import EditUser from './Pages/EditUser'
 import OrderDetails from './Pages/OrderDetails'
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import axios from 'axios'
 function App() {
   const [showNav, setShowNav] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
   const pathname = useLocation();
   const { user } = useSelector(state => state)
   console.log(pathname)
   useEffect(() => {
     setShowNav(false)
   }, [pathname])
+  useEffect(() => {
+    axios.get('https://ineuron-internship.onrender.com').then(response => {
+      setIsLoading(false);
+    }).catch(error => {
+      setIsLoading(false);
+      console.log(error);
+    });
+  }, []);
   const ProtectedRoutes = ({ children }) => {
     if (user.isAdmin) {
       return children
@@ -55,7 +65,19 @@ function App() {
       </div>
       <div className="flex">
         <Nav showNav={showNav} setShowNav={setShowNav} />
-        <div className='flex-grow p-4'>
+        {isLoading && <div className="flex flex-col m-auto p-4 justify-center align-center">
+          <CountdownCircleTimer
+            isPlaying
+            duration={55}
+            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+            colorsTime={[7, 5, 2, 0]}
+          >
+            {({ remainingTime }) => remainingTime}
+
+          </CountdownCircleTimer>
+          <h4>Due to free service the server goes to sleep mode after 15 min .Please wait for 55 seconds the server will restart </h4>
+        </div>}
+        {!isLoading && <div className='flex-grow p-4'>
           <Routes>
             <Route path={'/'} element={
               <ProtectedRoutes>
@@ -113,7 +135,7 @@ function App() {
               </UnProtectedRoutes>
             } exact></Route>
           </Routes>
-        </div>
+        </div>}
       </div>
     </div>
   )

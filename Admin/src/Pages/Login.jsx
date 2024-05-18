@@ -55,7 +55,7 @@ export default function Login() {
                                     </svg>
                                 </div>
 
-                                <input required id="email" type="email" name="email" className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="E-Mail Address" onChange={setInputChange} />
+                                <input required id="email" type="email" value={inputs?.email} name="email" className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="E-Mail Address" onChange={setInputChange} />
                             </div>
                         </div>
                         <div className="flex flex-col mb-6">
@@ -69,7 +69,7 @@ export default function Login() {
                                     </span>
                                 </div>
 
-                                <input required id="password" type="password" name="password" className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="Password" onChange={setInputChange} />
+                                <input required id="password" value={inputs?.password} type="password" name="password" className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="Password" onChange={setInputChange} />
                             </div>
                         </div>
 

@@ -92,7 +92,6 @@ export default function Login() {
                         <span className="ml-2">You don't have an account?</span>
                     </Link>
                 </div>
-                <p className='text-xs font-light text-red-700 pt-2'>* Email and password is provided to Grant admin access to examine the website Plz dont delete or modify the whole data </p>
             </div>
         </div>
     );

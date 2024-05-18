@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
@@ -10,12 +10,26 @@ import Account from './Pages/Account';
 import Cart from './Pages/Cart';
 import ProductDetais from './Pages/ProductDetais';
 import OrderDetail from './Pages/OrderDetail';
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import axios from 'axios';
+import Center from './Components/Center';
 
 function App() {
   const { auth: { user }, counter: { cart: cart } } = useSelector(state => state);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    axios.get('https://ineuron-internship.onrender.com').then(response => {
+      setLoading(false);
+    }).catch(error => {
+      setLoading(false);
+      console.log(error);
+    });
+  }, []);
+
   const ProtectedRoutes = ({ children }) => {
     if (user) {
       return children
@@ -26,7 +40,21 @@ function App() {
   }
   return (
     <React.Fragment>
-      <Routes>
+      {loading &&
+        <Center>
+          <CountdownCircleTimer
+            isPlaying
+            duration={55}
+            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+            colorsTime={[7, 5, 2, 0]}
+          >
+            {({ remainingTime }) => remainingTime}
+            
+          </CountdownCircleTimer>
+          <h4>Due to free service the server goes to sleep mode after 15 min .Please wait for 55 seconds the server will restart </h4>
+        </Center>
+      }
+      {!loading && <Routes>
         <Route path='/'
           element={
             <>
@@ -82,7 +110,7 @@ function App() {
           <Header />
           404
         </div>} />
-      </Routes>
+      </Routes>}
     </React.Fragment>
   )
 }
