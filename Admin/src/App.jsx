@@ -28,7 +28,7 @@ function App() {
   }, [pathname])
   useEffect(() => {
     axios.get('https://ineuron-internship.onrender.com').then(response => {
-      // setIsLoading(false);
+      setIsLoading(false);
     }).catch(error => {
       setIsLoading(false);
       console.log(error);

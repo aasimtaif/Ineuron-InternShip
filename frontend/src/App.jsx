@@ -31,7 +31,7 @@ function App() {
 
   useEffect(() => {
     axios.get('https://ineuron-internship.onrender.com').then(response => {
-      // setLoading(false);
+      setLoading(false);
     }).catch(error => {
       setLoading(false);
       console.log(error);
