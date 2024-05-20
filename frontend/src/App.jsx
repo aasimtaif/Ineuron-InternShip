@@ -13,6 +13,7 @@ import OrderDetail from './Pages/OrderDetail';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import axios from 'axios';
 import styled from 'styled-components';
+import Timer from './Components/Timer';
 
 const Loader = styled.div` 
 position: fixed;
@@ -30,7 +31,7 @@ function App() {
 
   useEffect(() => {
     axios.get('https://ineuron-internship.onrender.com').then(response => {
-      setLoading(false);
+      // setLoading(false);
     }).catch(error => {
       setLoading(false);
       console.log(error);
@@ -47,18 +48,7 @@ function App() {
   }
   if (loading)
     return (
-      <Loader>
-        <CountdownCircleTimer
-          isPlaying
-          duration={55}
-          colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-          colorsTime={[37, 50, 22, 10]}
-        >
-          {({ remainingTime }) => remainingTime}
-
-        </CountdownCircleTimer>
-        <h4>Due to free service the server goes to sleep mode after 15 min .Please wait for 55 seconds the server will restart </h4>
-      </Loader>
+      <Timer />
     )
   return (
     <React.Fragment>

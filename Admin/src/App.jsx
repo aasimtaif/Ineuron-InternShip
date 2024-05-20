@@ -15,8 +15,8 @@ import Users from './Pages/Users'
 import NewUser from './Pages/NewUser'
 import EditUser from './Pages/EditUser'
 import OrderDetails from './Pages/OrderDetails'
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import axios from 'axios'
+import Timer from './components /Timer'
 function App() {
   const [showNav, setShowNav] = useState(false);
   const [isLoading, setIsLoading] = useState(true)
@@ -28,7 +28,7 @@ function App() {
   }, [pathname])
   useEffect(() => {
     axios.get('https://ineuron-internship.onrender.com').then(response => {
-      setIsLoading(false);
+      // setIsLoading(false);
     }).catch(error => {
       setIsLoading(false);
       console.log(error);
@@ -51,18 +51,7 @@ function App() {
     }
   }
   if (isLoading) {
-    return (<div className="flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-20">
-      <CountdownCircleTimer
-        isPlaying
-        duration={65}
-        colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-        colorsTime={[7, 5, 2, 0]}
-      >
-        {({ remainingTime }) => remainingTime}
-
-      </CountdownCircleTimer>
-      <h4>Due to free service the server goes to sleep mode after 15 min .Please wait for 65 seconds the server will restart </h4>
-    </div>)
+    return <Timer />
   }
   return (
     <div className="bg-bgGray min-h-screen ">
