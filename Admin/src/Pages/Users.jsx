@@ -18,6 +18,10 @@ function Users() {
         getData()
     }, [])
     const deleteProduct = async (id) => {
+        if (id === '6614327a16ee51d440a86ba5') {
+            alert('You can not delete Admin')
+            return
+        }
         try {
             await Axios.delete(`users/${id}`)
             setUsers(users.filter(user => user._id !== id))
